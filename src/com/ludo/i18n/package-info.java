@@ -5,4 +5,4 @@
  * @author Petter
  *
  */
-package resources;
+package com.ludo.i18n;
