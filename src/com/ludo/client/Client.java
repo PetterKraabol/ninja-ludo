@@ -8,11 +8,20 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ludo.i18n.MessageBundle;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 /**
  * @author Petter
  *
  */
-public class Client {
+public class Client extends Application {
     
     /**
      * Default hostname
@@ -33,7 +42,7 @@ public class Client {
         System.out.println("Client");
         //Server server = new Server(hostname, port);
         //server.connect();
-        ChatClient chatClient = new ChatClient();
+        //ChatClient chatClient = new ChatClient();
     }
     
     /**
@@ -43,8 +52,34 @@ public class Client {
      */
     public static void main(String[] args) throws Exception {
         
-        Client client = new Client();
+        launch(args);
 
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        
+        Image icon = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
+        MessageBundle message = new MessageBundle();
+        
+        if (message.existsFile()) {
+            message.writeToFile(message.readFile());
+            
+        } else { 
+            message.creatFile();
+            message.writeToFile("us");
+        }
+            
+    
+        
+        Parent root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
+        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle(message.retriveText("login.topText"));
+        stage.getIcons().add(icon);
+        stage.show();
+        
     }
 
 }

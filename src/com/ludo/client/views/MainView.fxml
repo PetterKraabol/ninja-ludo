@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.media.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="714.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="Game">
+              <items>
+                <MenuItem mnemonicParsing="false" text="New Game" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Scorboard">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+              </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="31.0" prefHeight="17.0" prefWidth="290.0" text="Global chat">
+         <font>
+            <Font name="Arial Bold Italic" size="32.0" />
+         </font>
+      </Label>
+      <ScrollPane layoutY="80.0" prefHeight="523.0" prefWidth="290.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="502.0" prefWidth="288.0" />
+        </content>
+      </ScrollPane>
+      <TextField layoutY="604.0" prefHeight="25.0" prefWidth="244.0" />
+      <Button layoutX="245.0" layoutY="604.0" mnemonicParsing="false" text="Write" />
+      <MenuBar layoutX="714.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="197.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="User">
+            <items>
+              <MenuItem fx:id="signOutMenuItem" mnemonicParsing="false" text="Sing Out" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TabPane layoutX="623.0" layoutY="80.0" prefHeight="551.0" prefWidth="288.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Friends">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane prefHeight="494.0" prefWidth="288.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <TextField layoutY="495.0" prefHeight="25.0" prefWidth="229.0" promptText="Comment" />
+                        <Button layoutX="231.0" layoutY="495.0" maxWidth="150.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Chat-roms">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

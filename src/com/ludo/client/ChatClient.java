@@ -44,7 +44,7 @@ public class ChatClient {
                 textField.setText("");
                 
             }
-        });   
+        });
     }
     
     // Ask for username
