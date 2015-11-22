@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="630.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="633.0" fitWidth="630.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../resources/ludo.jpg" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="NONE" />
+         </cursor>
+      </ImageView>
+      <ScrollPane layoutX="629.0" layoutY="56.0" prefHeight="504.0" prefWidth="290.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+        </content>
+      </ScrollPane>
+      <TextField layoutX="629.0" layoutY="562.0" prefHeight="25.0" prefWidth="243.0" />
+      <Button layoutX="872.0" layoutY="562.0" mnemonicParsing="false" text="Write" />
+      <Label fx:id="chatLabel" alignment="CENTER" layoutX="629.0" layoutY="10.0" prefHeight="37.0" prefWidth="290.0" text="Game chat" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Bold Italic" size="32.0" />
+         </font>
+      </Label>
+      <Group>
+         <children>
+            <Circle fx:id="blueBrick1" fill="#00aaff" layoutX="503.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="blueBrick2" fill="#00aaff" layoutX="461.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="blueBrick3" fill="#00aaff" layoutX="544.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="blueBrick4" fill="#00aaff" layoutX="503.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+      <Group layoutX="-378.0" layoutY="-1.0">
+         <children>
+            <Circle fx:id="redBrick1" fill="#ff1b00" layoutX="503.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="redBrick2" fill="#ff1b00" layoutX="461.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="redBrick3" fill="#ff1b00" layoutX="544.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="redBrick4" fill="#ff1b00" layoutX="503.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+      <Group layoutX="-378.0" layoutY="377.0">
+         <children>
+            <Circle fx:id="greenBrick1" fill="#29ff00" layoutX="503.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="greenBrick2" fill="#29ff00" layoutX="461.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="greenBrick3" fill="#29ff00" layoutX="544.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="greenBrick4" fill="#29ff00" layoutX="503.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+      <Group layoutY="377.0">
+         <children>
+            <Circle fx:id="yellowBrick1" fill="#f5ff00" layoutX="503.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="yellowBrick2" fill="#f5ff00" layoutX="461.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="yellowBrick3" fill="#f5ff00" layoutX="544.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="yellowBrick4" fill="#f5ff00" layoutX="503.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+      <Button fx:id="gameBtn" layoutX="629.0" layoutY="589.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="290.0" style="-fx-background-color: #ff6e00; -fx-border-color: #000000;" text="Move the brick">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="usernameRedLabel" alignment="CENTER" prefHeight="28.0" prefWidth="250.0" text="User Red">
+         <font>
+            <Font name="Arial Black" size="19.0" />
+         </font>
+      </Label>
+      <Label fx:id="usernameBlueLabel" alignment="CENTER" layoutX="378.0" prefHeight="28.0" prefWidth="250.0" text="User Blue">
+         <font>
+            <Font name="Arial Black" size="19.0" />
+         </font>
+      </Label>
+      <Label fx:id="usernameGreenLabel" alignment="CENTER" layoutY="378.0" prefHeight="28.0" prefWidth="250.0" text="User Green">
+         <font>
+            <Font name="Arial Black" size="19.0" />
+         </font>
+      </Label>
+      <Label fx:id="usernameYellowLabel" alignment="CENTER" layoutX="378.0" layoutY="378.0" prefHeight="28.0" prefWidth="250.0" text="User Yellow">
+         <font>
+            <Font name="Arial Black" size="19.0" />
+         </font>
+      </Label>
+      <Ellipse fx:id="turneIndicator" fill="#ff6e00" layoutX="225.0" layoutY="225.0" radiusX="17.0" radiusY="17.0" stroke="BLACK" strokeType="INSIDE">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Ellipse>
+   </children>
+</AnchorPane>
