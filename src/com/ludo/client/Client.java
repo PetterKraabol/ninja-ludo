@@ -46,9 +46,9 @@ public class Client extends Application {
     }
     
     /**
-     * @param args
-     * @throws IOException 
-     * @throws UnknownHostException 
+     * TODO: Description
+     * @param args Run arguments
+     * @throws Exception Exceptions 
      */
     public static void main(String[] args) throws Exception {
         

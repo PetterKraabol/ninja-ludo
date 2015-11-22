@@ -128,13 +128,13 @@ public class DatabaseHandler {
             // Try executing the queries
             try {
                 
-                Statement stmt = connection.createStatement();
+                Statement statement = connection.createStatement();
                 
                 // For each queries and query...
                 for (String query : queries) {
                     
                     // Execute query
-                    stmt.execute(query);
+                    statement.execute(query);
                 }
                 
                 // Close database connection
@@ -153,6 +153,24 @@ public class DatabaseHandler {
             }
             
         }
+        
+    }
+    
+    /**
+     * Execute raw queries from outside this class.
+     * It cannot return any data at this moment.
+     * 
+     * @param query Raw query String to be executed
+     */
+    public void executeRawQuery(String query) {
+        
+        // Query list
+        ArrayList<String> queries = new ArrayList<String>();
+        
+        // Add Query to list
+        queries.add(query);
+        
+        execute(queries);
         
     }
 }

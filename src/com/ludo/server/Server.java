@@ -37,7 +37,10 @@ public class Server extends Thread {
     public static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 
     /**
-     * @param args
+     * TODO: Description
+     * 
+     * @param args Run arguments
+     * @throws Exception Exceptions
      */
     public static void main(String[] args) throws Exception {
         

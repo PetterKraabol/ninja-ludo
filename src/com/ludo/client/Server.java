@@ -48,6 +48,7 @@ public class Server {
     
     /**
      * Attempt to connect to server
+     * @throws Exception Exceptions
      */
     public void connect() throws Exception {
         Socket socket = new Socket(hostname, port);
