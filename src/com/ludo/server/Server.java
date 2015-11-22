@@ -30,6 +30,10 @@ public class Server extends Thread {
      */
     public static HashSet<String> users = new HashSet<String>();
     
+    /**
+     * List of writers for input and output
+     * from and to connected users.
+     */
     public static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 
     /**
@@ -39,14 +43,18 @@ public class Server extends Thread {
         
         System.out.println("Server is running");
         
-        ServerSocket listener = new ServerSocket(port);
+        // Database
+        DatabaseHandler database = new DatabaseHandler();
+        
+        // Listeners
+        /*ServerSocket listener = new ServerSocket(port);
         try {
             while(true) {
-                new ServerHandler(listener.accept()).start();
+                new ChatHandler(listener.accept()).start();
             }
         } finally {
             listener.close();
-        }
+        }*/
 
     }
 

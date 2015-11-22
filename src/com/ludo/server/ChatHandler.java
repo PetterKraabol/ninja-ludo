@@ -13,14 +13,14 @@ import java.net.Socket;
  * @author Petter
  *
  */
-public class ServerHandler extends Server {
+public class ChatHandler extends Server {
     private String name;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     
-    public ServerHandler(Socket socket) {
-        System.out.print("Server Handler");
+    public ChatHandler(Socket socket) {
+        System.out.print("Chat Server Handler");
         this.socket = socket;
     }
     
