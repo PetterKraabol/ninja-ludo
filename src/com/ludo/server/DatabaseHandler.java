@@ -31,9 +31,14 @@ public class DatabaseHandler {
     private final static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
     
     /**
+     * Database Name
+     */
+    private final static String databaseName = "ludo";
+    
+    /**
      * Database Server URL
      */
-    private final static String derbyURL = "jdbc:derby:ludo;create=true";
+    private final static String derbyURL = "jdbc:derby:" + databaseName + ";create=true";
     
     /**
      * DatabaseHandler constructor to construct the necessary
@@ -43,7 +48,6 @@ public class DatabaseHandler {
         
         // Create and remove tables (Testing)
         createTables();
-        dropTables();
         
     }
     
@@ -113,7 +117,7 @@ public class DatabaseHandler {
     }
     
     /**
-     * Execute a list of queries
+     * Execute a list of sql queries
      * @param queries
      */
     private void execute(List<String> queries) {
@@ -137,7 +141,15 @@ public class DatabaseHandler {
                 connection.close();
                 
             } catch (SQLException sqle) {
-                sqle.printStackTrace();
+                
+                // It's OK if table already exists
+                if(sqle.getErrorCode() == 30000) {
+                    System.out.println("Skipped query because table(s) already exists: " + queries);
+                    return;
+                }
+                
+                // Print error
+                System.out.println(sqle);
             }
             
         }
