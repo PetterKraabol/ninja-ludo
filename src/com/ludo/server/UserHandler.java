@@ -21,7 +21,7 @@ public class UserHandler {
         
         try {
             
-            // If user is found
+            // If user is found, authentication is successful
             if(results.next()) {
                 System.out.println("User Authenticated: " + results.getString("username"));
                 return true;
