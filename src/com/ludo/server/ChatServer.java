@@ -108,7 +108,6 @@ public class ChatServer {
                                 break;
                             } else {
                                 out.println("LOGINDENIED");
-                                return;
                             }
                         }
                     }
