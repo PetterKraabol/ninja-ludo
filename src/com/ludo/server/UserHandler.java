@@ -3,6 +3,9 @@
  */
 package com.ludo.server;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author Petter
  *
@@ -11,11 +14,27 @@ public class UserHandler {
     DatabaseHandler database = new DatabaseHandler();
     
     
-    public void authenticateUser(String username, String password) {
+    public boolean authenticateUser(String username, String password) {
         
-        System.out.println("Trying to authenticate " + username + ":" + password);
-        System.out.println(database.query("SELECT COUNT(*) FROM users WHERE user =  " + username + " AND password = " + password));
+        // Fetch user with password from database
+        ResultSet results = database.select("SELECT id, username, password FROM users WHERE username=\"" + username + "\" AND password=\"" + password + "\";");
         
+        try {
+            
+            // If user is found
+            if(results.next()) {
+                System.out.println("User Authenticated: " + results.getString("username"));
+                return true;
+            } else {
+                System.out.println("Auth failed: " + username);
+                return false;
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return false;
     }
     
     public void newUser() {

@@ -41,9 +41,11 @@ public class ChatServer extends Server {
                 synchronized(users) {
                     if(!users.contains(name)) {
                         System.out.println("New user: " + name);
-                        userHandler.authenticateUser(name, "password");
-                        users.add(name);
-                        break;
+                        if(userHandler.authenticateUser(name, "password")) {
+                            System.out.println("New user: " + name);
+                            users.add(name);
+                            break;
+                        }
                     }
                 }
             }

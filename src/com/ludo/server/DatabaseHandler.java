@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Petter
@@ -27,19 +26,19 @@ public class DatabaseHandler {
     private static Connection connection;
     
     /**
-     * Database Driver
-     */
-    private final static String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-    
-    /**
-     * Database Name
-     */
-    private final static String databaseName = "ludo";
-    
-    /**
      * Database Server URL
      */
-    private final static String derbyURL = "jdbc:derby:" + databaseName + ";create=true";
+    private final static String url = "jdbc:mysql://localhost:3306/ludo";
+    
+    /**
+     * MySQL User
+     */
+    private final static String user = "root";
+    
+    /**
+     * MySQL Password
+     */
+    private static final String password = null;
     
     /**
      * DatabaseHandler constructor to construct the necessary
@@ -62,8 +61,7 @@ public class DatabaseHandler {
         
         // Try connecting
         try {
-            Class.forName(driver);
-            connection = DriverManager.getConnection(derbyURL);
+            connection = DriverManager.getConnection(url, user, password);
             
         } catch (Exception e) {
             System.out.println("Error connecting to database: " + e);
@@ -76,10 +74,19 @@ public class DatabaseHandler {
     /**
      * Reset all tables by clearing their data.
      */
-    public void resetTables() {
+    public void truncateTable(String table) {
         
         // Truncate users table
-        execute("TRUNCATE TABLE users");
+        String truncateTable = "TRUNCATE TABLE users";
+        
+        // Try to execute the query
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(truncateTable);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -87,82 +94,63 @@ public class DatabaseHandler {
      */
     public void createTables() {
         
+        ArrayList<String> queries = new ArrayList<String>();
+        
         // Create users table query
-        String query = "CREATE TABLE users ("
-                + "id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                + " username VARCHAR(50) NOT NULL UNIQUE,"
-                + " password VARCHAR(50),"
-                + " UNIQUE(username)"
-                + ")";
+        queries.add("CREATE TABLE IF NOT EXISTS `users` (`id` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT, `username` varchar(45) NOT NULL UNIQUE, `password` varchar(45) NOT NULL)");
         
-        // Execute the query
-        execute(query);
-        
-        // Test user
-        execute("INSERT INTO users (username, password) VALUES ('admin', 'password')");
-    }
-    
-    /**
-     * Drop all tables
-     */
-    public void dropTables() {
-        
-        // Drop user table
-        execute("DROP TABLE users");
-    }
-    
-    /**
-     * Execute a list of sql queries
-     * @param query
-     */
-    private ResultSet execute(String query) {
-        
-        // Check if a database connection can be created
-        if(!createConnection()) {
-            return null;
-        }
-            
-        // Try executing the queries
+        // Try to execute the queries
         try {
-            
             Statement statement = connection.createStatement();
             
-            // For each queries and query...
-            ResultSet result = statement.executeQuery(query);
+            for (String query : queries) {
+                statement.executeUpdate(query);
+            }
             
-            // Close database connection
-            connection.close();
-            
-            // Return result
-            return result;
-            
-        } catch (SQLException sqle) {
-            
-            System.out.println("ERROR, CODE: " + sqle.getErrorCode());
-            
-            // It's OK if table already exists
-            /*if(sqle.getErrorCode() == 30000) {
-                System.out.println("Skipped query because table(s) already exists: " + query);
-                return null;
-            }*/
-            
-            // Print error
-            System.out.println(sqle);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Drop (delete) a table
+     * @param table Table name
+     */
+    public void dropTable(String table) {
+        
+        // Drop user table
+        String dropTable = "DROP TABLE IF EXISTS " + table;
+        
+        // Try to execute the query
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(dropTable);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ResultSet select(String query) {
+        
+        // Try to execute the query
+        try {
+            Statement statement = connection.createStatement();
+            return statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         
         return null;
-        
     }
     
-    /**
-     * Execute raw queries from outside this class.
-     * It cannot return any data at this moment.
-     * 
-     * @param query Raw query String to be executed
-     */
-    public ResultSet query(String query) {
+    public void insert(String query) {
         
-        return execute(query);
-        
+        // Try to execute the query
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
