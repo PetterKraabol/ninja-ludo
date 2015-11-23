@@ -106,6 +106,9 @@ public class ChatServer {
                                 System.out.println("New user: " + username);
                                 users.add(username);
                                 break;
+                            } else {
+                                out.println("LOGINDENIED");
+                                return;
                             }
                         }
                     }
