@@ -48,16 +48,24 @@ public class Server extends Thread {
         
         // Database
         DatabaseHandler database = new DatabaseHandler();
+        System.out.println("Reset");
+        database.resetTables();
+        
+        System.out.println("Drop");
+        database.dropTables();
+        
+        System.out.println("Create");
+        database.createTables();
         
         // Listeners
-        /*ServerSocket listener = new ServerSocket(port);
+        ServerSocket listener = new ServerSocket(port);
         try {
             while(true) {
-                new ChatHandler(listener.accept()).start();
+                new ChatServer(listener.accept()).start();
             }
         } finally {
             listener.close();
-        }*/
+        }
 
     }
 

@@ -9,6 +9,7 @@ package com.ludo.server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -46,8 +47,10 @@ public class DatabaseHandler {
      */
     public DatabaseHandler() {
         
-        // Create and remove tables (Testing)
-        createTables();
+        System.out.println("Database Handler");
+        
+        if(createConnection())
+            System.out.println("Database connection is OK");
         
     }
     
@@ -75,84 +78,79 @@ public class DatabaseHandler {
      */
     public void resetTables() {
         
-        // List of queries
-        List<String> queries = new ArrayList<String>();
-        
-        // Truncate tables
-        queries.add("TRUNCATE TABLE users");
-        
-        execute(queries);
+        // Truncate users table
+        execute("TRUNCATE TABLE users");
     }
     
     /**
      * Create necessary Database Tables
      */
-    private void createTables() {
+    public void createTables() {
         
-        // List of queries
-        List<String> queries = new ArrayList<String>();
+        // Create users table query
+        String query = "CREATE TABLE users ("
+                + "id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                + " username VARCHAR(50) NOT NULL UNIQUE,"
+                + " password VARCHAR(50),"
+                + " UNIQUE(username)"
+                + ")";
         
-        // Create users table
-        queries.add("CREATE TABLE users (id integer primary key,"
-                                      + "username VARCHAR(50) UNIQUE,"
-                                      + "password VARCHAR(50))");
+        // Execute the query
+        execute(query);
         
-        // Execute the queries
-        execute(queries);
+        // Test user
+        execute("INSERT INTO users (username, password) VALUES ('admin', 'password')");
     }
     
     /**
      * Drop all tables
      */
-    private void dropTables() {
+    public void dropTables() {
         
-        // List of queries
-        List<String> queries = new ArrayList<String>();
-        
-        // Drop users table
-        queries.add("DROP TABLE users");
-        
-        // Execute the queries
-        execute(queries);
+        // Drop user table
+        execute("DROP TABLE users");
     }
     
     /**
      * Execute a list of sql queries
-     * @param queries
+     * @param query
      */
-    private void execute(List<String> queries) {
+    private ResultSet execute(String query) {
         
         // Check if a database connection can be created
-        if(createConnection()) {
-            
-            // Try executing the queries
-            try {
-                
-                Statement statement = connection.createStatement();
-                
-                // For each queries and query...
-                for (String query : queries) {
-                    
-                    // Execute query
-                    statement.execute(query);
-                }
-                
-                // Close database connection
-                connection.close();
-                
-            } catch (SQLException sqle) {
-                
-                // It's OK if table already exists
-                if(sqle.getErrorCode() == 30000) {
-                    System.out.println("Skipped query because table(s) already exists: " + queries);
-                    return;
-                }
-                
-                // Print error
-                System.out.println(sqle);
-            }
-            
+        if(!createConnection()) {
+            return null;
         }
+            
+        // Try executing the queries
+        try {
+            
+            Statement statement = connection.createStatement();
+            
+            // For each queries and query...
+            ResultSet result = statement.executeQuery(query);
+            
+            // Close database connection
+            connection.close();
+            
+            // Return result
+            return result;
+            
+        } catch (SQLException sqle) {
+            
+            System.out.println("ERROR, CODE: " + sqle.getErrorCode());
+            
+            // It's OK if table already exists
+            /*if(sqle.getErrorCode() == 30000) {
+                System.out.println("Skipped query because table(s) already exists: " + query);
+                return null;
+            }*/
+            
+            // Print error
+            System.out.println(sqle);
+        }
+        
+        return null;
         
     }
     
@@ -162,15 +160,9 @@ public class DatabaseHandler {
      * 
      * @param query Raw query String to be executed
      */
-    public void executeRawQuery(String query) {
+    public ResultSet query(String query) {
         
-        // Query list
-        ArrayList<String> queries = new ArrayList<String>();
-        
-        // Add Query to list
-        queries.add(query);
-        
-        execute(queries);
+        return execute(query);
         
     }
 }

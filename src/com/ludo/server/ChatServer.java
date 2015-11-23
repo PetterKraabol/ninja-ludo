@@ -18,6 +18,7 @@ public class ChatServer extends Server {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private UserHandler userHandler = new UserHandler();
     
     public ChatServer(Socket socket) {
         System.out.print("Chat Server Handler");
@@ -39,6 +40,8 @@ public class ChatServer extends Server {
                 
                 synchronized(users) {
                     if(!users.contains(name)) {
+                        System.out.println("New user: " + name);
+                        userHandler.authenticateUser(name, "password");
                         users.add(name);
                         break;
                     }
