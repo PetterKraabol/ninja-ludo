@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="293.0" prefWidth="277.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ludo.client.controllers.LoginController">
+<AnchorPane prefHeight="293.0" prefWidth="277.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ludo.client.controllers.LoginController">
    <children>
       <Button fx:id="loginBtn" layoutX="111.0" layoutY="144.0" mnemonicParsing="false" onAction="#loginAction" text="Sign in" />
       <TextField fx:id="usernameField" layoutX="64.0" layoutY="80.0" promptText="Username" />

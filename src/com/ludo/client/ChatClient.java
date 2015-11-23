@@ -74,9 +74,9 @@ public class ChatClient {
         while(true) {
             String line = in.readLine();
             
-            if(line.startsWith("LOGINREQUEST")) {
+            if(line.startsWith("SUBMITNAME")) {
                 out.println(getName());
-            } else if(line.startsWith("LOGINACCEPTED")) {
+            } else if(line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
             } else if(line.startsWith("MESSAGE")) {
                 messageArea.append(line.substring(8) + "\n");

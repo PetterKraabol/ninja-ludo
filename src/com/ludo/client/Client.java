@@ -23,6 +23,8 @@ import javafx.stage.Stage;
  */
 public class Client extends Application {
     
+	String ludo = "";
+	
     /**
      * Default hostname
      */
@@ -51,7 +53,6 @@ public class Client extends Application {
      * @throws Exception Exceptions 
      */
     public static void main(String[] args) throws Exception {
-        
         launch(args);
 
     }

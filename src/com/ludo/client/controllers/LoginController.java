@@ -1,9 +1,15 @@
 package com.ludo.client.controllers;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.net.URL;
-
+import java.net.UnknownHostException;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
 
 import com.ludo.client.User;
 import com.ludo.i18n.MessageBundle;
@@ -47,28 +53,51 @@ public class LoginController implements Initializable {
 	@FXML
 	private Button usImageBtn;
 	
+	private String serverAdress;
+	
 	// Create user class
-	User user = new User();
 	MessageBundle message = new MessageBundle();
+	
+	private BufferedReader in;
+	private PrintWriter out;
+	
+	
+	private Socket socket;
+	
+	
 	
 	@FXML
 	public void loginAction(ActionEvent event) throws IOException {
+		
+		Boolean i = true;
 		
 		// Check if all Fields are filled inn
 		if (usernameField.getText().trim().isEmpty() || passwordField.getText().trim().isEmpty()) {
 			errorLabel.setText(message.retriveText("register.error.missingFields"));
 		
 		// If login is valid
-		} else if (user.login(usernameField.getText(), passwordField.getText().trim())) {
-			Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
-			Scene client_page_scene = new Scene(client_page_parent);
-			Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-			app_stage.setScene(client_page_scene);
-			app_stage.setTitle(message.retriveText("main.topText"));
-			app_stage.show();
+		} else {
 			
-		// If Login was wrong 
-		} else { errorLabel.setText("Wrong username or password!"); }
+			String line = in.readLine();
+			out.println(usernameField.getText()); 
+			
+			while(i) {
+				if(line.startsWith("REQUESTLOGIN")) { 
+					//out.println(usernameField.getText());   
+					
+				} else if(line.startsWith("LOGINACCEPTED")) { 
+	        		
+	        		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
+	    			Scene client_page_scene = new Scene(client_page_parent);
+	    			Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	    			app_stage.setScene(client_page_scene);
+	    			app_stage.setTitle(message.retriveText("main.topText"));
+	    			app_stage.show();
+	    			i = false;
+	        	} 
+	        	else { errorLabel.setText("Wrong username or password!"); }
+			}
+		}
 	}
 	
 	@FXML
@@ -108,7 +137,34 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Change the language of objects in LoginView.fxml
-        welcomeLabel.setText(message.retriveText("login.welcomeMessage"));	// Welcome message
+		serverAdress = JOptionPane.showInputDialog(null, "Server IP Address: ", "Connect", JOptionPane.QUESTION_MESSAGE);
+		
+		
+	    try {
+			socket = new Socket(serverAdress, 4040);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			out = new PrintWriter(socket.getOutputStream(), true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  
+	    
+		
+		welcomeLabel.setText(message.retriveText("login.welcomeMessage"));	// Welcome message
         usernameField.setPromptText(message.retriveText("login.username"));	// Username Field
         passwordField.setPromptText(message.retriveText("login.password"));	// Password Field
         loginBtn.setText(message.retriveText("login.btn"));					// Login Button
