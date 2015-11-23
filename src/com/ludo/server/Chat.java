@@ -46,6 +46,7 @@ public class Chat {
          * Run chat and listen for commands
          */
         public void run() {
+            System.out.println("Running chat");
             try {
                 
                 // Listen for commands
