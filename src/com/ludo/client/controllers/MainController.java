@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ludo.client.LoginManager;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -62,7 +64,7 @@ public class MainController implements Initializable {
 	
 	MessageBundle message = new MessageBundle();
 	
-	@FXML
+	/*@FXML
 	public void logoutAction(ActionEvent event) throws IOException {
 		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
 		Scene client_page_scene = new Scene(client_page_parent);
@@ -70,7 +72,7 @@ public class MainController implements Initializable {
 		app_stage.setScene(client_page_scene);
 		app_stage.setTitle(message.retriveText("login.topText"));
 		app_stage.show();
-	}
+	}*/
 	
 	@FXML
 	public void newGameAction(ActionEvent event) throws IOException {
@@ -90,5 +92,20 @@ public class MainController implements Initializable {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public void initSessionID(LoginManager loginManager, String sessionID) {
+        globalChatLabel.setText(sessionID);
+        
+        /**
+         * Logout button
+         */
+        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                loginManager.logout();
+            }
+        });
+    }
 
 }

@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import com.ludo.i18n.MessageBundle;
 
 import javafx.application.Application;
@@ -75,11 +77,29 @@ public class Client extends Application {
         
         Parent root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
         
+        
+        root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle(message.retriveText("login.topText"));
         stage.getIcons().add(icon);
         stage.show();
+        
+        //--------- Ask for another scene -------------
+        String answer = JOptionPane.showInputDialog(null,
+                "Choose a screen name: ",
+                "Screen name selection",
+                JOptionPane.PLAIN_MESSAGE);
+        
+        // If user wants login, show login, else show mainview
+        if(answer.equals("login")) {
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml")));
+            stage.setScene(newScene);
+        } else {
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/ludo/client/views/MainView.fxml")));
+            stage.setScene(newScene);
+        }
         
     }
 

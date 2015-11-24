@@ -11,10 +11,12 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import com.ludo.client.LoginManager;
 import com.ludo.client.User;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -152,7 +154,8 @@ public class LoginController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// Change the language of objects in LoginView.fxml
+		/*
+	    // Change the language of objects in LoginView.fxml
 		serverAdress = JOptionPane.showInputDialog(null, "Server IP Address: ", "Connect", JOptionPane.QUESTION_MESSAGE);
 		
 		
@@ -177,7 +180,7 @@ public class LoginController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	  
+		*/
 	    
 		
 		welcomeLabel.setText(message.retriveText("login.welcomeMessage"));	// Welcome message
@@ -187,6 +190,36 @@ public class LoginController implements Initializable {
         registerLabel.setText(message.retriveText("login.registerText"));	// Register Label
         registerBtn.setText(message.retriveText("login.registerBtn"));		// Register Button 
 	}
+
+    public void initManager(final LoginManager loginManager) {
+        
+        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                String sessionID = authorize();
+                if (sessionID != null) {
+                    loginManager.authenticated(sessionID);
+                }
+            }
+        });
+        
+    }
+    
+    /**
+     * Authorize user
+     * @return
+     */
+    private String authorize() {
+        return usernameField.getText() + ":" + passwordField.getText();
+    }
+    
+    private static int sessionID = 0;
+    
+    private String generateSessionID() {
+        sessionID++;
+        return usernameField.getText() + " " + sessionID;
+    }
 
 	
 
