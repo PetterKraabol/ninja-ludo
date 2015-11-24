@@ -14,17 +14,47 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class MainController implements Initializable {
 
-	// FXML
+	// FXML Labels
+	@FXML
+	private Label globalChatLabel;
+	@FXML
+	private Label friendChatLabel;
+	
+	// FXML Tab
+	@FXML
+	private Tab friendTab;
+	
+	// FXML TextArea
+	@FXML
+	private TextArea globalChatTextArea;
+	@FXML
+	private TextArea friendTextArea;
+	
+	// FXML TextField
+	@FXML
+	private TextField globalChatTextField;
+	@FXML
+	private TextField friendTextField;
+	
+	// FXML Buttons
 	@FXML
 	private Button logoutBtn;
 	@FXML
 	private Button newGameBtn;
+	@FXML
+	private Button writeBtn;
+	@FXML
+	private Button addFriendBtn;
 	
 	MessageBundle message = new MessageBundle();
 	

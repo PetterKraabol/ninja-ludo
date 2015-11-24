@@ -11,7 +11,7 @@
    <children>
       <AnchorPane prefHeight="639.0" prefWidth="290.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="290.0" text="Global chat">
+            <Label fx:id="globalChatLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="290.0" text="Global chat">
                <font>
                   <Font name="Arial Bold Italic" size="32.0" />
                </font>
@@ -20,13 +20,13 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="521.0" prefWidth="288.0">
                      <children>
-                        <TextArea editable="false" prefHeight="523.0" prefWidth="288.0" />
+                        <TextArea fx:id="globalChatTextArea" editable="false" prefHeight="523.0" prefWidth="288.0" />
                      </children>
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <TextField layoutY="581.0" prefHeight="25.0" prefWidth="244.0" promptText="Comment" />
-            <Button layoutX="244.0" layoutY="581.0" mnemonicParsing="false" text="Write" />
+            <TextField fx:id="globalChatTextField" layoutY="581.0" prefHeight="25.0" prefWidth="244.0" promptText="Comment" />
+            <Button fx:id="writeBtn" layoutX="244.0" layoutY="581.0" mnemonicParsing="false" text="Write" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="290.0" prefHeight="607.0" prefWidth="335.0">
@@ -47,39 +47,37 @@
       </AnchorPane>
       <AnchorPane layoutX="621.0" prefHeight="607.0" prefWidth="290.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="290.0" text="Friends / Chat">
+            <Label fx:id="friendChatLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="290.0" text="Friends / Chat">
                <font>
                   <Font name="Arial Bold Italic" size="32.0" />
                </font>
             </Label>
             <TabPane layoutX="1.0" layoutY="56.0" prefHeight="551.0" prefWidth="288.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Friends">
+                <Tab fx:id="friendTab" text="Friends">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <ScrollPane prefHeight="494.0" prefWidth="288.0">
                                  <content>
-                                    <TextArea editable="false" prefHeight="492.0" prefWidth="286.0" />
+                                    <TextArea fx:id="friendTextArea" editable="false" prefHeight="492.0" prefWidth="286.0" />
                                  </content>
                               </ScrollPane>
-                              <TextField editable="false" layoutY="495.0" prefHeight="25.0" prefWidth="229.0" promptText="Add user" />
-                              <Button layoutX="231.0" layoutY="495.0" maxWidth="150.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
+                              <TextField fx:id="friendTextField" editable="false" layoutY="495.0" prefHeight="25.0" prefWidth="229.0" promptText="Add user" />
+                              <Button fx:id="addFriendBtn" layoutX="231.0" layoutY="495.0" maxWidth="150.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Chat-roms">
+                <Tab fx:id="chatTab" text="Chat-roms">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <ScrollPane prefHeight="494.0" prefWidth="288.0">
                                  <content>
-                                    <TextArea editable="false" prefHeight="492.0" prefWidth="285.0" />
+                                    <TextArea fx:id="chatTextArea" editable="false" prefHeight="492.0" prefWidth="285.0" />
                                  </content>
                               </ScrollPane>
-                              <TextField layoutY="495.0" prefHeight="25.0" prefWidth="229.0" />
-                              <Button layoutX="231.0" layoutY="495.0" mnemonicParsing="false" prefWidth="56.0" text="Add" />
                            </children>
                         </AnchorPane>
                   </content>
