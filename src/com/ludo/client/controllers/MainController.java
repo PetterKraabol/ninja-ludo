@@ -33,12 +33,16 @@ public class MainController implements Initializable {
 	// FXML Tab
 	@FXML
 	private Tab friendTab;
+	@FXML
+	private Tab chatTab;
 	
 	// FXML TextArea
 	@FXML
 	private TextArea globalChatTextArea;
 	@FXML
 	private TextArea friendTextArea;
+	@FXML
+	private TextArea chatTextArea;
 	
 	// FXML TextField
 	@FXML
