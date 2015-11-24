@@ -21,6 +21,7 @@ public class Server extends Thread {
         
         // Chat Server
         ChatServer chatServer = new ChatServer();
+      
 
     }
 

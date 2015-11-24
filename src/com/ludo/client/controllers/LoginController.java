@@ -69,33 +69,49 @@ public class LoginController implements Initializable {
 	@FXML
 	public void loginAction(ActionEvent event) throws IOException {
 		
-		Boolean i = true;
+		String line;
+		
 		
 		// Check if all Fields are filled inn
 		if (usernameField.getText().trim().isEmpty() || passwordField.getText().trim().isEmpty()) {
 			errorLabel.setText(message.retriveText("register.error.missingFields"));
 		
+			
+			
 		// If login is valid
 		} else {
+			out.println(usernameField.getText());
+			System.out.println(usernameField.getText());
 			
-			String line = in.readLine();
-			out.println(usernameField.getText()); 
 			
-			while(i) {
-				if(line.startsWith("REQUESTLOGIN")) { 
-					//out.println(usernameField.getText());   
+			
+			while(true) {
+				//System.out.println("test");
+				line = in.readLine();
+				//System.out.println("test2");
+				
+				
+				//System.out.print("Line" + line);
+				
+				if(line.startsWith("LOGINDENIED")) {
+					errorLabel.setText(message.retriveText("login.error.missingFields"));
+					break;
+				}
 					
-				} else if(line.startsWith("LOGINACCEPTED")) { 
+				if(line.startsWith("LOGINACCEPTED")) { 
 	        		
+					System.out.println("LOGINACCEPTED");
+					socket.close();
 	        		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
 	    			Scene client_page_scene = new Scene(client_page_parent);
 	    			Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	    			app_stage.setScene(client_page_scene);
 	    			app_stage.setTitle(message.retriveText("main.topText"));
 	    			app_stage.show();
-	    			i = false;
+	    			System.out.println("break");
+	    			break;
 	        	} 
-	        	else { errorLabel.setText("Wrong username or password!"); }
+	        	
 			}
 		}
 	}
