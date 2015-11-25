@@ -78,14 +78,23 @@ public class LoginController implements Initializable {
         		}
         		
         		// Check if username and password are correct
-				if(loginManager.authenticate(username, password)) {
+				int response = loginManager.authenticate(username, password);
+				
+				// Success
+        		if(response == 0) {
 				    try {
                         loginManager.showMainView();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-				} else {
+				}
+        		// Login denied
+        		else if(response == 1) {
 				    errorLabel.setText(messageBundle.retriveText("login.error.loginDenied"));
+				}
+        		// Already logged in
+        		else if(response == 2) {
+        		    errorLabel.setText(messageBundle.retriveText("login.error.alreadyLoggedIn"));
 				}
             }
         });

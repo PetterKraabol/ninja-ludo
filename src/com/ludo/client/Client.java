@@ -1,10 +1,12 @@
 package com.ludo.client;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Client extends Application {
     
@@ -26,6 +28,13 @@ public class Client extends Application {
         stage.setScene(scene);
         stage.getIcons().add(icon);
         stage.show();
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                loginManager.closeWindow();
+            }
+        }); 
+        
     }
     
 }

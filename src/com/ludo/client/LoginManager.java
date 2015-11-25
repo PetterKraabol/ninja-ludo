@@ -76,7 +76,7 @@ public class LoginManager {
     /**
      * TODO Description
      */
-    public boolean authenticate(String username, String password) {
+    public int authenticate(String username, String password) {
         
         // Send login request to server with username and password
         this.out.println("LOGIN " + username + " " + password);
@@ -95,13 +95,19 @@ public class LoginManager {
             
             // Login accepted
             if(line.startsWith("LOGINACCEPTED")) {
-                return true;
+                return 0;
             }
             
             // Login denied
             if(line.startsWith("LOGINDENIED")) {
-                return false;
+                return 1;
             }
+            
+            // Already logged in
+            if(line.startsWith("ALREADYLOGGEDIN")) {
+                return 2;
+            }
+            
             
         }
     }
@@ -242,6 +248,13 @@ public class LoginManager {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing registration view: " + e);
         }
+    }
+    
+    /**
+     * When user closes client window, send LOGOUT request to server
+     */
+    public void closeWindow() {
+        this.out.println("LOGOUT");
     }
     
     /**

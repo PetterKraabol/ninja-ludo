@@ -110,17 +110,17 @@ public class ChatServer {
                         
                         System.out.println("Login reuqest:" + request);
                         
-                        this.username = args[1];
+                        this.username = args[1].toLowerCase();
                         this.password = args[2];
                         
                         // Attempt to authenticate user
                         synchronized(users) {
-                            if(!users.contains(username)) {
-                                if(userHandler.authenticateUser(username, password)) {
+                            if(userHandler.authenticateUser(username, password)) {
+                                if(!users.contains(username)) {
                                     users.add(username);
                                     break;
                                 } else {
-                                    out.println("LOGINDENIED");
+                                    out.println("ALREADYLOGGEDIN");
                                 }
                             } else {
                                 out.println("LOGINDENIED");
