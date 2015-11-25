@@ -74,10 +74,10 @@ public class LoginManager {
      */
     public boolean authenticate(String username, String password) {
         
-        // Send login request
-        out.println(username);
+        // Send login request to server with username and password
+        this.out.println("LOGIN " + username + " " + password);
         
-        // Listen for input
+        // Listen for response to see if it was accepted or not
         String line = null;
         
         while(true) {
@@ -106,6 +106,9 @@ public class LoginManager {
      * If the user logs out, refresh the socket and dispolay the login screen
      */
     public void logout() {
+        
+        // Send logout request
+        this.out.println("LOGOUT");
         
         // Close current socket
         try {
@@ -167,6 +170,9 @@ public class LoginManager {
                 JOptionPane.QUESTION_MESSAGE);
     }
     
+    /**
+     * Switch to login view
+     */
     public void showLoginScreen() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
@@ -184,6 +190,9 @@ public class LoginManager {
         }
     }
     
+    /**
+     * Switch to main view
+     */
     public void showMainView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
@@ -193,13 +202,16 @@ public class LoginManager {
             
             // Main View Controller
             MainController controller = loader.<MainController>getController();
-            controller.initManager(this);
+            controller.initManager(this, this.in, this.out);
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);
         }
     }
-
+    
+    /**
+     * Switch to registration view
+     */
     public void showRegistrationView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
@@ -214,5 +226,14 @@ public class LoginManager {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing registration view: " + e);
         }
+    }
+    
+    /**
+     * The chat handler takes care of incoming chat messages.
+     * @author Petter
+     *
+     */
+    private static class ChatHandler extends Thread {
+        
     }
 }

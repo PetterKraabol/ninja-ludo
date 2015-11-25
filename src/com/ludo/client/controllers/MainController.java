@@ -1,6 +1,9 @@
 package com.ludo.client.controllers;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -12,12 +15,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -56,9 +57,13 @@ public class MainController implements Initializable {
      * Initialized by the Login Manager (LoginManager.java)
      * This function sets up necessary event handlers for the view.
      * @param loginManager
-     * @param sessionID
+     * @param in Input from server
+     * @param out Output to server
      */
-    public void initManager(LoginManager loginManager) {
+    public void initManager(LoginManager loginManager, BufferedReader in, PrintWriter out) {
+        
+        String request;
+        String[] args;
         
         /**
          * New Game Button
@@ -93,6 +98,42 @@ public class MainController implements Initializable {
                 loginManager.logout();
             }
         });
+        
+        writeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                if(!globalChatTextField.getText().trim().isEmpty()) {
+                    
+                    // Send message to server
+                    out.println("MESSAGE " + globalChatTextField.getText().trim());
+                    
+                    // Clear chat input field
+                    globalChatTextField.setText("");
+                }
+            }
+        });
+        
+        // Listen for incoming messages
+        while(true) {
+            
+            // Try reading from server
+            try {
+                request = in.readLine();
+                
+                if(request.startsWith("MESSAGE")) {
+                    args = request.split(" ");
+                    
+                    // Add text to chat
+                    globalChatTextArea.appendText(args[1] + ": " + request.substring("MESSAGE ".length() + args[1].length() + 1));
+                    
+                }
+                
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
     
     @Override

@@ -57,6 +57,9 @@ public class ChatServer {
      */
     private static class Handler extends Thread {
         private String username;
+        private String password;
+        private String request;
+        private String[] args;
         private Socket socket;
         private BufferedReader in;
         private PrintWriter out;
@@ -76,14 +79,13 @@ public class ChatServer {
          * Running the chat communication for input and outputs
          */
         public void run() {
-            System.out.println("Run");
             try {
                 
                 // Input reader (from client)
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 
                 // Output printer (to client)
-                out = new PrintWriter(socket.getOutputStream(), true);
+                this.out = new PrintWriter(this.socket.getOutputStream(), true);
                 
                 /**
                  * First, send a login request command REQUESTLOGIN
@@ -91,44 +93,60 @@ public class ChatServer {
                  */
                 while(true) {
                     out.println("LOGINREQUEST");
-                    username = in.readLine();
+                    this.request = in.readLine();
                     
                     // If no login data is received, keep reading inputs
-                    if (username == null) {
+                    if (request == null) {
                         return;
                     }
                     
-                    // If login data has been received, attempt to authenticate user.
-                    synchronized(users) {
-                        if(!users.contains(username)) {
-                            if(userHandler.authenticateUser(username, "password")) {
-                                System.out.println("New user: " + username);
-                                users.add(username);
-                                break;
+                    System.out.println(request);
+                    
+                    // Split incoming message
+                    this.args = this.request.split(" ");
+                    
+                    // If client is attempting to log in with LOGIN <username> <password>
+                    if(this.request.startsWith("LOGIN") && args.length == 3) {
+                        
+                        System.out.println("Login reuqest:" + request);
+                        
+                        this.username = args[1];
+                        this.password = args[2];
+                        
+                        // Attempt to authenticate user
+                        synchronized(users) {
+                            if(!users.contains(username)) {
+                                if(userHandler.authenticateUser(username, password)) {
+                                    users.add(username);
+                                    break;
+                                } else {
+                                    out.println("LOGINDENIED");
+                                }
                             } else {
                                 out.println("LOGINDENIED");
                             }
                         }
+                        
                     }
                 }
                 
                 // Report back to client that login authentication succeeded.
-                out.println("LOGINACCEPTED");
+                this.out.println("LOGINACCEPTED");
                 writers.add(out);
                 
                 /**
                  * Handle incoming chat messages from client and
                  * broadcast them to every connected client.
                  */
+                
                 while(true) {
-                    String input = in.readLine();
+                    request = in.readLine();
+                    args = request.split(" ");
                     
-                    if(input == null) {
-                        return;
-                    }
-                    
-                    for(PrintWriter writer : writers) {
-                        writer.println("MESSAGE " + username + " " + input);
+                    if(request.startsWith("MESSAGE")) {
+                        for(PrintWriter writer : writers) {
+                            writer.println("MESSAGE " + username + " " + request.substring("MESSAGE ".length()));
+                        }
                     }
                     
                 }
@@ -138,11 +156,11 @@ public class ChatServer {
             } finally {
                 
                 if(username != null) {
-                    users.remove(username);
+                    users.remove(this.username);
                 }
                 
                 if(out != null) {
-                    writers.remove(out);
+                    writers.remove(this.out);
                 }
                 
                 try {

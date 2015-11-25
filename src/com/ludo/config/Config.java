@@ -128,8 +128,6 @@ public class Config {
                     continue;
                 }
                 
-                System.out.println("Reading: " + line);
-                
                 // Load configuration name and value to the configuration map.
                 this.configuration.put(config[0].trim(), config[1].trim());
             }
