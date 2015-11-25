@@ -245,6 +245,7 @@ public class LoginManager {
         
         public ChatHandler(TextArea chat, BufferedReader in) {
             this.chat = chat;
+            this.chat.setWrapText(true);
             this.in = in;
         }
         
@@ -261,7 +262,7 @@ public class LoginManager {
                     this.args = this.request.split(" ");
                     
                     // Add text to chat
-                    this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1));
+                    this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1) + "\n");
                     
                 }
                 

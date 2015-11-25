@@ -16,15 +16,7 @@
                   <Font name="Arial Bold Italic" size="32.0" />
                </font>
             </Label>
-            <ScrollPane layoutY="58.0" prefHeight="523.0" prefWidth="290.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="521.0" prefWidth="288.0">
-                     <children>
-                        <TextArea fx:id="globalChatTextArea" editable="false" prefHeight="523.0" prefWidth="288.0" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
+            <TextArea fx:id="globalChatTextArea" editable="false" layoutX="1.0" layoutY="58.0" maxWidth="288.0" prefHeight="523.0" prefWidth="288.0" />
             <TextField fx:id="globalChatTextField" layoutY="581.0" prefHeight="25.0" prefWidth="244.0" promptText="Comment" />
             <Button fx:id="writeBtn" layoutX="244.0" layoutY="581.0" mnemonicParsing="false" text="Write" />
          </children>
