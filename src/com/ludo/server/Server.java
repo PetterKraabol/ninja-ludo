@@ -20,6 +20,7 @@ public class Server extends Thread {
         System.out.println("Starting servers...");
         
         // Chat Server
+        @SuppressWarnings("unused")
         ChatServer chatServer = new ChatServer();
       
 

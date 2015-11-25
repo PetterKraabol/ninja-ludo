@@ -30,19 +30,43 @@ public class UserHandler {
                 return false;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Error finding username and password from the database");
             e.printStackTrace();
         }
         
         return false;
     }
     
-    public void newUser() {
+    public void newUser(String username, String password) {
         
+        // Insert username and password to database
+        database.insert("SELECT id, username, password FROM users WHERE username=\"" + username + "\" AND password=\"" + password + "\";");
     }
     
-    public boolean userExists() {
-        return true;
+    /**
+     * Check if a username exists in the database
+     * @param username
+     * @return boolean
+     */
+    public boolean usernameTaken(String username) {
+        
+        // Try to find user from database
+        ResultSet results = database.select("SELECT id, username FROM users WHERE username=\"" + username + "\";");
+        
+        try {
+            
+            // If username is found
+            if(results.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error returning if user exists in the database");
+            e.printStackTrace();
+        }
+        
+        return false;
     }
 
 }

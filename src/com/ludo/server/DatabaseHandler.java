@@ -90,7 +90,7 @@ public class DatabaseHandler {
     }
     
     /**
-     * Create necessary Database Tables
+     * Create necessary database Tables
      */
     public void createTables() {
         
@@ -113,7 +113,7 @@ public class DatabaseHandler {
     }
     
     /**
-     * Drop (delete) a table
+     * Drop (delete) a table in the database
      * @param table Table name
      */
     public void dropTable(String table) {
@@ -130,6 +130,11 @@ public class DatabaseHandler {
         }
     }
     
+    /**
+     * Execute an SQL query and resturn the result set.
+     * @param query
+     * @return
+     */
     public ResultSet select(String query) {
         
         // Try to execute the query
@@ -143,6 +148,10 @@ public class DatabaseHandler {
         return null;
     }
     
+    /**
+     * Execute an insert query to the database.
+     * @param query
+     */
     public void insert(String query) {
         
         // Try to execute the query

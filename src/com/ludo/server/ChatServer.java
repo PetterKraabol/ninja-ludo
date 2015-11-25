@@ -11,6 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 
+import com.ludo.config.Config;
+
 /**
  * @author Petter
  *
@@ -18,9 +20,14 @@ import java.util.HashSet;
 public class ChatServer {
     
     /**
+     * Configurations
+     */
+    private static Config config = new Config();
+    
+    /**
      * Chat server port
      */
-    private static final int port = 4040;
+    private static int port;
     
     /**
      * List of connected user names
@@ -33,14 +40,22 @@ public class ChatServer {
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     
     /**
-     * The chat server contrusctor listens for new connections on
+     * The chat server constructor listens for new connections on
      * a specified port and creates new Handler objects
      * to handle server communications.
      * @throws Exception
      */
     public ChatServer() throws Exception {
-        System.out.println("Chat server listening on port " + port);
+        
+        // Set port
+        port = Integer.parseInt(config.getConfig("chatPort"));
+        
+        System.out.println("Chat server running on port " + port);
+        
+        // Open server socket for specified port.
         ServerSocket listener = new ServerSocket(port);
+        
+        // On new connections, start a new thread to handle communications.
         try {
             while(true) {
                 new Handler(listener.accept()).start();
@@ -76,7 +91,9 @@ public class ChatServer {
         }
         
         /**
-         * Running the chat communication for input and outputs
+         * Running the chat communication for input and outputs.
+         * It will first handle login and register communication with
+         * the client, then proceed to handle chat messages and logout requests.
          */
         public void run() {
             try {
@@ -105,15 +122,25 @@ public class ChatServer {
                     // Split incoming message
                     this.args = this.request.split(" ");
                     
+                    // If client is attempting to register a new user REGISTER <username> <password>
+                    if(this.request.startsWith("REGISTER")) {
+                        
+                        // Register username if not already taken.
+                        if(!userHandler.usernameTaken(args[1])) {
+                            userHandler.newUser(username, password);
+                            out.println("REGISTERACCEPTED");
+                        } else {
+                            out.println("ALREADYEXISTS");
+                        }
+                    }
+                    
                     // If client is attempting to log in with LOGIN <username> <password>
                     if(this.request.startsWith("LOGIN") && args.length == 3) {
-                        
-                        System.out.println("Login reuqest:" + request);
                         
                         this.username = args[1].toLowerCase();
                         this.password = args[2];
                         
-                        // Attempt to authenticate user
+                        // Attempt to authenticate user. Make sure the users list is used synchronously
                         synchronized(users) {
                             if(userHandler.authenticateUser(username, password)) {
                                 if(!users.contains(username)) {
@@ -187,7 +214,7 @@ public class ChatServer {
             } finally {
                 
                 /**
-                 * On disconnecting, do some cleanup
+                 * Cleanup when the client is disconnected.
                  */
                 
                 // Remove username from users list
