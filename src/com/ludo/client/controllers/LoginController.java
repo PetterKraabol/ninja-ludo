@@ -79,32 +79,39 @@ public class LoginController implements Initializable {
         			
         		// If login is valid
         		} else {
+        			/*try {
+        				out.println(usernameField.getText());
+        				System.out.println(usernameField.getText());
         			
-        			// out.println(usernameField.getText());
-        			// System.out.println(usernameField.getText());
         			
-        			/*
-        			while(true) {
-        				//System.out.println("test");
-        				line = in.readLine();
-        				//System.out.println("test2");
+        				while(true) {
+        					//System.out.println("test");
         				
-        				
-        				//System.out.print("Line" + line);
-        				
-        				if(line.startsWith("LOGINDENIED")) {
-        					errorLabel.setText(message.retriveText("login.error.missingFields"));
-        					break;
-        				}
-        					
-        				if(line.startsWith("LOGINACCEPTED")) {
-            			*/
-        					String sessionID = authorize();
-        					if (sessionID != null) {
-        						loginManager.authenticated(sessionID);
-        				//	}
-        			//	}
-        			}
+								line = in.readLine();
+							
+								if(line.startsWith("LOGINDENIED")) {
+									errorLabel.setText(message.retriveText("login.error.missingFields"));
+									break;
+								}
+	        					
+								if(line.startsWith("LOGINACCEPTED")) {
+	            			
+									String sessionID = authorize();
+									if (sessionID != null) {
+										loginManager.authenticated(sessionID);
+									}
+								}
+        				}		
+					} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+					}*/
+        			
+        			String sessionID = authorize();
+					if (sessionID != null) {
+						loginManager.authenticated(sessionID);
+					}
+        			
         		}
             }
         });
