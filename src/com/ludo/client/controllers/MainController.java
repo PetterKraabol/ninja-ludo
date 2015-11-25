@@ -58,8 +58,7 @@ public class MainController implements Initializable {
      * @param loginManager
      * @param sessionID
      */
-    public void initSessionID(LoginManager loginManager, String sessionID) {
-        globalChatLabel.setText(sessionID);
+    public void initManager(LoginManager loginManager) {
         
         /**
          * New Game Button

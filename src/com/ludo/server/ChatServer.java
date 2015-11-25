@@ -101,7 +101,6 @@ public class ChatServer {
                     // If login data has been received, attempt to authenticate user.
                     synchronized(users) {
                         if(!users.contains(username)) {
-                            System.out.println("New user: " + username);
                             if(userHandler.authenticateUser(username, "password")) {
                                 System.out.println("New user: " + username);
                                 users.add(username);

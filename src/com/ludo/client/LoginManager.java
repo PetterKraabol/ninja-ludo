@@ -1,6 +1,10 @@
 package com.ludo.client;
 
+import java.awt.DisplayMode;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -22,10 +26,10 @@ public class LoginManager {
     /**
      * MessageBundle for I18N
      */
-    MessageBundle messageBundle = new MessageBundle();
+    private MessageBundle messageBundle = new MessageBundle();
     
     /**
-     * JavaFX Scene
+     * JavaFX
      */
     private Scene scene;
     private Stage stage;
@@ -35,10 +39,17 @@ public class LoginManager {
      */
     private Socket socket;
     
+    // Input and Output from/to server
+    private BufferedReader in;
+    private PrintWriter out;
+    
     /**
      * Application configuration
      */
     private Config config = new Config();
+    
+    // Username
+    private String username = null;
     
     /**
      * Constructor to hold scene and create a socket connection to the server.
@@ -50,16 +61,45 @@ public class LoginManager {
         this.scene = scene;
         this.stage = stage;
         
+        // Display login screen first
+        showLoginScreen();
+        
         // Set socket to connect to server.
         this.socket = connectToServer();
+        
     }
     
     /**
-     * If the user is authenticated, show the main view scene.
-     * @param sessionID
+     * TODO Description
      */
-    public void authenticated(String sessionID) {
-        showMainView(sessionID);
+    public boolean authenticate(String username, String password) {
+        
+        // Send login request
+        out.println(username);
+        
+        // Listen for input
+        String line = null;
+        
+        while(true) {
+            
+            // Try reading server message
+            try {
+                line = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            // Login accepted
+            if(line.startsWith("LOGINACCEPTED")) {
+                return true;
+            }
+            
+            // Login denied
+            if(line.startsWith("LOGINDENIED")) {
+                return false;
+            }
+            
+        }
     }
     
     /**
@@ -70,6 +110,7 @@ public class LoginManager {
         // Close current socket
         try {
             this.socket.close();
+            System.out.println("Closing socker");
         } catch (IOException e) {
             System.out.println("Error disconnecting from server");
             e.printStackTrace();
@@ -87,11 +128,14 @@ public class LoginManager {
      * @return Socket socket connection to server
      */
     public Socket connectToServer() {
-        Socket socket;
+        Socket socket = null;
         
+        // Connect to server
         try {
+            
+            // Create new socket connectin with server
             socket = new Socket(askForIPAddress(), Integer.parseInt(config.getConfig("chatPort")));
-            return socket;
+            
         } catch (UnknownHostException e) {
             System.out.println("Unknown Host");
             e.printStackTrace();
@@ -100,7 +144,16 @@ public class LoginManager {
             e.printStackTrace();
         }
         
-        return null;
+        // Open I/O stream with server
+        try {
+            this.in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            System.out.println("Error establishing I/O with chat server");
+            e.printStackTrace();
+        }
+        
+        return socket;
     }
     
     /**
@@ -131,7 +184,7 @@ public class LoginManager {
         }
     }
     
-    public void showMainView(String sessionID) {
+    public void showMainView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
             scene.setRoot((Parent) loader.load());
@@ -140,7 +193,7 @@ public class LoginManager {
             
             // Main View Controller
             MainController controller = loader.<MainController>getController();
-            controller.initSessionID(this, sessionID);
+            controller.initManager(this);
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);

@@ -49,22 +49,9 @@ public class LoginController implements Initializable {
 	@FXML private Button registerBtn;
 	@FXML private Button noImageBtn;
 	@FXML private Button usImageBtn;
-	private String serverAdress;
 	
 	// Create user class
 	MessageBundle messageBundle = new MessageBundle();
-	
-	private BufferedReader in;
-	private PrintWriter out;
-	
-	
-	private Socket socket;
-	
-	
-	
-	
-	
-	
     
 	/**
      * Initialized by the Login Manager (LoginManager.java)
@@ -80,49 +67,22 @@ public class LoginController implements Initializable {
             
             @Override
             public void handle(ActionEvent event) {
-                
-            	String line;
             	
-            	// Check if all Fields are filled inn
-        		if (usernameField.getText().trim().isEmpty() || passwordField.getText().trim().isEmpty()) {
+            	String username = usernameField.getText().trim();
+            	String password = passwordField.getText().trim();
+            	
+            	// Abort if missing fields
+        		if (username.isEmpty() || password.isEmpty()) {
         			errorLabel.setText(messageBundle.retriveText("register.error.missingFields"));
-        			
-        		// If login is valid
-        		} else {
-        			/*try {
-        				out.println(usernameField.getText());
-        				System.out.println(usernameField.getText());
-        			
-        			
-        				while(true) {
-        					//System.out.println("test");
-        				
-								line = in.readLine();
-							
-								if(line.startsWith("LOGINDENIED")) {
-									errorLabel.setText(message.retriveText("login.error.missingFields"));
-									break;
-								}
-	        					
-								if(line.startsWith("LOGINACCEPTED")) {
-	            			
-									String sessionID = authorize();
-									if (sessionID != null) {
-										loginManager.authenticated(sessionID);
-									}
-								}
-        				}		
-					} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-					}*/
-        			
-        			String sessionID = authorize();
-					if (sessionID != null) {
-						loginManager.authenticated(sessionID);
-					}
-        			
+        			return;
         		}
+        		
+        		// Check if username and password are correct
+				if(loginManager.authenticate(username, password)) {
+				    loginManager.showMainView();
+				} else {
+				    errorLabel.setText(messageBundle.retriveText("login.error.loginDenied"));
+				}
             }
         });
         
@@ -167,21 +127,8 @@ public class LoginController implements Initializable {
         
     }
     
-    /**
-     * Authorize user
-     * @return
-     */
-    private String authorize() {
-        return usernameField.getText() + " " + passwordField.getText();
-    }
-    
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
-		/*
-	    // Change the language of objects in LoginView.fxml
-		serverAdress = JOptionPane.showInputDialog(null, "Server IP Address: ", "Connect", JOptionPane.QUESTION_MESSAGE);
-		*/
-	    
 		welcomeLabel.setText(messageBundle.retriveText("login.welcomeMessage"));	// Welcome message
         usernameField.setPromptText(messageBundle.retriveText("login.username"));	// Username Field
         passwordField.setPromptText(messageBundle.retriveText("login.password"));	// Password Field
