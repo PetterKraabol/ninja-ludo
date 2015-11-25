@@ -55,61 +55,12 @@ public class RegisterController implements Initializable {
     /* This is performed then the user have pressed the register button in order to try and register as a user,
        if that is not the case the user will get different error messages to try and help him out.
     */
-    /*@FXML
-    public void registerAction(ActionEvent event) throws IOException {
-        
-        // Check if all Fields are filled inn
-        if (firstNameField.getText().trim().isEmpty() || lastNameField.getText().trim().isEmpty() ||
-            emailField.getText().trim().isEmpty()     || usernameField.getText().trim().isEmpty() ||
-            passwordField.getText().trim().isEmpty()  || passwordVerifyField.getText().trim().isEmpty()) 
-        {   
-            errorLabel.setText(message.retriveText("login.error.missingFields"));
-        
-        // If email is not valid
-        } else if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
-            errorLabel.setText(message.retriveText("register.error.email"));
-            
-        // If passwords are not the same
-        } else if (!passwordField.getText().trim().equals(passwordVerifyField.getText().trim()) ) {
-            errorLabel.setText(message.retriveText("register.error.password"));
-            passwordField.clear();
-            passwordVerifyField.clear();
-            
-        } else {
-            
-            // Send the data to the server
-            
-            // Goes back to the login screen/view
-            Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
-            Scene client_page_scene = new Scene(client_page_parent);
-            Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            app_stage.setScene(client_page_scene);
-            app_stage.setTitle(message.retriveText("login.topText"));
-            app_stage.show();
-            
-            JOptionPane.showMessageDialog(null, message.retriveText("login.successful.register"));
-        }
-    }*/
     
     // This is performed when the user wants to know if the username is already taken
     /*@FXML
     public void checkAction(ActionEvent event) throws IOException {
         
-        // If username field is empty
-        if (usernameField.getText().trim().isEmpty()) {
-            usernameCheckLabel.setTextFill(Color.web("#ff0000"));
-            usernameCheckLabel.setText(message.retriveText("register.username.missingfield"));
-        }
         
-        // When the username is taken
-        else if (user.checkUsername(usernameField.getText().trim())) {
-            usernameCheckLabel.setTextFill(Color.web("#ff0000"));
-            usernameCheckLabel.setText(message.retriveText("register.usernameCheckTrue"));
-        
-        } else {
-            usernameCheckLabel.setTextFill(Color.web("#00b120"));
-            usernameCheckLabel.setText(message.retriveText("register.usernameCheckFalse"));
-        }
     }*/
     
     @Override
@@ -120,12 +71,12 @@ public class RegisterController implements Initializable {
         lastNameField.setPromptText(message.retriveText("register.lastname"));                  // LastName Field
         emailField.setPromptText(message.retriveText("register.email"));                        // Email Field
         usernameField.setPromptText(message.retriveText("register.username"));                  // Username Field
-        usernameCheckLabel.setText(message.retriveText("register.usernameLabel"));              
-        checkBtn.setText(message.retriveText("register.usernameCheckBtn"));
-        passwordField.setPromptText(message.retriveText("register.password"));
-        passwordVerifyField.setPromptText(message.retriveText("register.passwordVerify"));
-        creatBtn.setText(message.retriveText("register.btn"));
-        backBtn.setText(message.retriveText("register.backBtn"));
+        usernameCheckLabel.setText(message.retriveText("register.usernameLabel"));         		// UsernameCheck Label     
+        checkBtn.setText(message.retriveText("register.usernameCheckBtn"));						// Check Btn
+        passwordField.setPromptText(message.retriveText("register.password"));					// Password Field
+        passwordVerifyField.setPromptText(message.retriveText("register.passwordVerify"));		// PasswordVerify Field
+        creatBtn.setText(message.retriveText("register.btn"));									// Creat Btn
+        backBtn.setText(message.retriveText("register.backBtn"));								// Back Btn
     }
     
     /**
@@ -142,7 +93,23 @@ public class RegisterController implements Initializable {
            
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Check name");
+
+            	// If username field is empty
+                if (usernameField.getText().trim().isEmpty()) {
+                    usernameCheckLabel.setTextFill(Color.web("#ff0000"));
+                    usernameCheckLabel.setText(message.retriveText("register.username.missingfield"));
+                }
+                
+                // When the username is taken
+                else if (user.checkUsername(usernameField.getText().trim())) {
+                    usernameCheckLabel.setTextFill(Color.web("#ff0000"));
+                    usernameCheckLabel.setText(message.retriveText("register.usernameCheckTrue"));
+                
+                } else {
+                    usernameCheckLabel.setTextFill(Color.web("#00b120"));
+                    usernameCheckLabel.setText(message.retriveText("register.usernameCheckFalse"));
+                }
+            	
             }
         });
         
@@ -153,7 +120,39 @@ public class RegisterController implements Initializable {
            
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Register user");
+                
+            	// Check if all Fields are filled inn
+                if (firstNameField.getText().trim().isEmpty() || lastNameField.getText().trim().isEmpty() ||
+                    emailField.getText().trim().isEmpty()     || usernameField.getText().trim().isEmpty() ||
+                    passwordField.getText().trim().isEmpty()  || passwordVerifyField.getText().trim().isEmpty()) 
+                {   
+                	usernameCheckLabel.setText("");
+                	errorLabel.setText(message.retriveText("login.error.missingFields"));
+                
+                // If email is not valid
+                } else if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
+                	usernameCheckLabel.setText("");
+                	errorLabel.setText(message.retriveText("register.error.email"));
+                    
+                // If passwords are not the same
+                } else if (!passwordField.getText().trim().equals(passwordVerifyField.getText().trim()) ) {
+                	usernameCheckLabel.setText("");
+                	errorLabel.setText(message.retriveText("register.error.password"));
+                    passwordField.clear();
+                    passwordVerifyField.clear();
+                
+                // If username is taken
+                } else if (user.checkUsername(usernameField.getText().trim())) {
+                	usernameCheckLabel.setText("");
+                	errorLabel.setText(message.retriveText("register.usernameCheckTrue"));
+                   
+                // If registration was successful 
+                } else { 
+                	loginManager.showLoginScreen(); // Go to loginScreen and give a congratulation message with your username
+                	JOptionPane.showMessageDialog(null, message.retriveText("login.successful.register.part1") + " " + 
+                	usernameField.getText().trim() + " " + message.retriveText("login.successful.register.part2"));
+                }
+            	
             }
         });
         

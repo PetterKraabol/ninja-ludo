@@ -20,7 +20,7 @@ public class Client extends Application {
         
         Scene scene = new Scene(new StackPane());
         
-        LoginManager loginManager = new LoginManager(scene);
+        LoginManager loginManager = new LoginManager(scene, stage);
         loginManager.showLoginScreen();
         
         stage.setScene(scene);

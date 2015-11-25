@@ -5,16 +5,22 @@ import java.io.IOException;
 import com.ludo.client.controllers.LoginController;
 import com.ludo.client.controllers.MainController;
 import com.ludo.client.controllers.RegisterController;
+import com.ludo.i18n.MessageBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class LoginManager {
     private Scene scene;
+    private Stage stage;
     
-    public LoginManager(Scene scene) {
+    MessageBundle message = new MessageBundle();
+    
+    public LoginManager(Scene scene, Stage stage) {
         this.scene = scene;
+        this.stage = stage;
     }
     
     /**
@@ -36,6 +42,8 @@ public class LoginManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
             scene.setRoot((Parent) loader.load());
+            stage.setTitle(message.retriveText("login.topText"));
+            stage.sizeToScene();
             
             // Login View Controller
             LoginController controller = loader.<LoginController>getController();
@@ -50,6 +58,8 @@ public class LoginManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
             scene.setRoot((Parent) loader.load());
+            stage.setTitle(message.retriveText("main.topText"));
+            stage.sizeToScene();
             
             // Main View Controller
             MainController controller = loader.<MainController>getController();
@@ -64,6 +74,8 @@ public class LoginManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
             scene.setRoot((Parent) loader.load());
+            stage.setTitle(message.retriveText("register.topText"));
+            stage.sizeToScene();
             
             // Main View Controller
             RegisterController controller = loader.<RegisterController>getController();

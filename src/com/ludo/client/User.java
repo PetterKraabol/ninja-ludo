@@ -40,7 +40,7 @@ public class User {
     public boolean checkUsername(String username) {
         
         // Return false if username is not taken
-        
+        //return true;
         
         // Return true if username is taken
         return false;
