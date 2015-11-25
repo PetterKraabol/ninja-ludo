@@ -138,14 +138,45 @@ public class ChatServer {
                  * Handle incoming chat messages from client and
                  * broadcast them to every connected client.
                  */
-                
                 while(true) {
-                    request = in.readLine();
-                    args = request.split(" ");
+                    this.request = in.readLine();
                     
-                    if(request.startsWith("MESSAGE")) {
+                    // Skip if no request
+                    if(request == null) {
+                        continue;
+                    }
+                    
+                    // Split request into arguments
+                    this.args = request.split(" ");
+                    
+                    // If this is a MESSAGE request from client, broadcast to everyone in chat
+                    if(this.request.startsWith("MESSAGE") && this.args.length >= 2) {
+                        
                         for(PrintWriter writer : writers) {
-                            writer.println("MESSAGE " + username + " " + request.substring("MESSAGE ".length()));
+                            writer.println("MESSAGE " + this.username + " " + this.request.substring("MESSAGE ".length()));
+                        }
+                    }
+                    
+                    // Manual logout from client
+                    if(this.request.startsWith("LOGOUT")) {
+                        
+                        System.out.println(this.username + " logged out.");
+                        
+                        // Remove username from users list
+                        if(this.username != null) {
+                            users.remove(this.username);
+                        }
+                        
+                        // Remove client from writers list
+                        if(this.out != null) {
+                            writers.remove(this.out);
+                        }
+                        
+                        // Close socket with client
+                        try {
+                            this.socket.close();
+                        } catch (IOException e) {
+                            System.out.println("Error closing socket for " + username + ": " + e);
                         }
                     }
                     
@@ -155,14 +186,21 @@ public class ChatServer {
                 System.out.println(e);
             } finally {
                 
+                /**
+                 * On disconnecting, do some cleanup
+                 */
+                
+                // Remove username from users list
                 if(username != null) {
                     users.remove(this.username);
                 }
                 
+                // Remove client from writers list
                 if(out != null) {
                     writers.remove(this.out);
                 }
                 
+                // Close socket with client
                 try {
                     socket.close();
                 } catch (IOException e) {

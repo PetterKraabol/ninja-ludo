@@ -52,6 +52,9 @@ public class LoginManager {
     // Username
     private String username = null;
     
+    // Chat thread
+    Thread chatThread = null;
+    
     /**
      * Constructor to hold scene and create a socket connection to the server.
      * @param scene
@@ -104,17 +107,24 @@ public class LoginManager {
     }
     
     /**
-     * If the user logs out, refresh the socket and dispolay the login screen
+     * If the user logs out, refresh the socket and display the login screen
      */
     public void logout() {
         
         // Send logout request
         this.out.println("LOGOUT");
         
+        // Put thread to sleep and kill it before disconnecting the socket.
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ((ChatHandler) this.chatThread).kill();
+        
         // Close current socket
         try {
             this.socket.close();
-            System.out.println("Closing socker");
         } catch (IOException e) {
             System.out.println("Error disconnecting from server");
             e.printStackTrace();
@@ -205,7 +215,9 @@ public class LoginManager {
             MainController controller = loader.<MainController>getController();
             controller.initManager(this, this.out);
             
-            new ChatHandler(controller.getTextArea(), in).start();
+            // Start chat thread
+            this.chatThread = new ChatHandler(controller.getTextArea(), in);
+            this.chatThread.start();
             
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
@@ -242,35 +254,58 @@ public class LoginManager {
         private String request;
         private String[] args;
         private BufferedReader in;
+        private Boolean running;
         
         public ChatHandler(TextArea chat, BufferedReader in) {
             this.chat = chat;
             this.chat.setWrapText(true);
             this.in = in;
+            this.running = true;
         }
         
+        /**
+         * "Kill" process
+         */
+        public void kill() {
+            System.out.println("Killing thread");
+            this.running = false;
+        }
+        
+        private Boolean alive() {
+            return this.running;
+        }
+        
+        /**
+         * Run thread that listens for incoming chat messages
+         */
         public void run() {
             
-        // Listen for incoming messages
-        while(true) {
-            
-            // Try reading from server
-            try {
-                this.request = this.in.readLine();
+            // Listen for incoming messages while thread is running
+            while(alive()) {
                 
-                if(request.startsWith("MESSAGE")) {
-                    this.args = this.request.split(" ");
+                // Try reading from server
+                try {
+                    this.request = this.in.readLine();
                     
-                    // Add text to chat
-                    this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1) + "\n");
+                    if(this.request == null) {
+                        continue;
+                    }
                     
+                    if(this.request.startsWith("MESSAGE")) {
+                        this.args = this.request.split(" ");
+                        
+                        // Add text to chat
+                        this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1) + "\n");
+                        
+                    }
+                    
+                } catch (IOException e) {
+                    System.out.println("Couldn't listen for incoming server messages for chat");
+                    e.printStackTrace();
                 }
-                
-            } catch (IOException e) {
-                System.out.println("Couldn't listen for incoming server messages for chat");
-                e.printStackTrace();
             }
-        }
+            
+            // Close socket
             
         }
         
