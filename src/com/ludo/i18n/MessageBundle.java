@@ -12,97 +12,54 @@ import java.io.OutputStreamWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class MessageBundle {
+import com.ludo.config.Config;
 
-    // Localization
-    private String language = "";
-    private String country = "";
-    private File file;
-    private String fileName = "src/com/ludo/config/language.properties";
+public class MessageBundle {
     
+    /**
+     * Configurations to load settings such
+     * as the language and country code for 
+     * selected language.
+     */
+    Config config = new Config();
     
-    public void Message(String language) {
-        writeToFile(language);
-    }
+    /**
+     * Language code
+     */
+    private String language;
     
-    public Boolean existsFile() {
-        return (new File(fileName).isFile());
-    }
+    /**
+     * Country code
+     */
+    private String country;
     
-    public String retriveText(String tmp) {
-        
-        try {
-            language = readFile();
-            
-            
-            if (language.equals("no")) {
-                country = "NO";
-            } else { country = "US"; }
-            
-            Locale currentLocale;
-            ResourceBundle text;
-            currentLocale = new Locale(language, country);
-            text = ResourceBundle.getBundle("com.ludo.i18n.MessagesBundle", currentLocale);
-            return text.getString(tmp);
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        return "Error";
-    }
+    /**
+     * Locale
+     */
+    Locale currentLocale;
     
-    public void creatFile() {
-        File file = new File(fileName);
-        
-         boolean blnCreated = false;
-         try
-         {
-           blnCreated = file.createNewFile();
-         }
-         catch(IOException ioe) {
-             System.out.println("Error while creating a new empty file :" + ioe);
-         }
+    /**
+     * Resource Bundle
+     */
+    ResourceBundle resource;
+    
+    public MessageBundle() {
         
     }
     
-    public void writeToFile(String language) {
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(fileName);
-            
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public String retriveText(String text) {
         
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+        // Load language from config file
+        this.language = config.getConfig("language");
+        this.country = config.getConfig("country");
         
-        try {
-            bw.write(language);
-            bw.close();
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    
-    public String readFile() throws IOException {
-        String languageCode = "";
+        // Set language and country for locale
+        this.currentLocale = new Locale(this.language, this.country);
         
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            
-            languageCode = br.readLine();
-            br.close();
-            return languageCode;
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // Get language bundle with selected locale.
+        this.resource = ResourceBundle.getBundle("com.ludo.i18n.MessagesBundle", this.currentLocale);
         
-        return languageCode;
+        // Return value
+        return resource.getString(text);
     }
 }
