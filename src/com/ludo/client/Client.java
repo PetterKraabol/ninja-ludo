@@ -29,6 +29,10 @@ public class Client extends Application {
         stage.getIcons().add(icon);
         stage.show();
         
+        /**
+         * When the user closes the application, make sure it sends LOGOUT to server
+         * so that the server can remove the user from the users list.
+         */
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 loginManager.closeWindow();

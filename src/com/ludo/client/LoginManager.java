@@ -313,12 +313,11 @@ public class LoginManager {
                     }
                     
                 } catch (IOException e) {
-                    System.out.println("Couldn't listen for incoming server messages for chat");
-                    e.printStackTrace();
+                    System.out.println("Lost connection to chat server.");
+                    break;
+                    //e.printStackTrace();
                 }
             }
-            
-            // Close socket
             
         }
         
