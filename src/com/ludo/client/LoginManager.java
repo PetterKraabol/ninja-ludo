@@ -15,6 +15,7 @@ import com.ludo.i18n.MessageBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class LoginManager {
     
@@ -27,6 +28,7 @@ public class LoginManager {
      * JavaFX Scene
      */
     private Scene scene;
+    private Stage stage;
     
     /**
      * Socket connection to chat server
@@ -42,10 +44,11 @@ public class LoginManager {
      * Constructor to hold scene and create a socket connection to the server.
      * @param scene
      */
-    public LoginManager(Scene scene) {
+    public LoginManager(Scene scene, Stage stage) {
         
         // Scene
         this.scene = scene;
+        this.stage = stage;
         
         // Set socket to connect to server.
         this.socket = connectToServer();
@@ -116,6 +119,9 @@ public class LoginManager {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
             scene.setRoot((Parent) loader.load());
             
+            stage.setTitle(messageBundle.retriveText("login.topText"));
+            stage.sizeToScene();
+            
             // Login View Controller
             LoginController controller = loader.<LoginController>getController();
             controller.initManager(this);
@@ -129,6 +135,8 @@ public class LoginManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
             scene.setRoot((Parent) loader.load());
+            stage.setTitle(messageBundle.retriveText("main.topText"));
+            stage.sizeToScene();
             
             // Main View Controller
             MainController controller = loader.<MainController>getController();
@@ -143,6 +151,8 @@ public class LoginManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
             scene.setRoot((Parent) loader.load());
+            stage.setTitle(messageBundle.retriveText("register.topText"));
+            stage.sizeToScene();
             
             // Main View Controller
             RegisterController controller = loader.<RegisterController>getController();

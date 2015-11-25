@@ -2,6 +2,7 @@ package com.ludo.client;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -17,15 +18,15 @@ public class Client extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
+    	Image icon = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
         Scene scene = new Scene(new StackPane());
         
-        LoginManager loginManager = new LoginManager(scene);
+        LoginManager loginManager = new LoginManager(scene, stage);
         loginManager.showLoginScreen();
         
         stage.setScene(scene);
+        stage.getIcons().add(icon);
         stage.show();
-        
     }
     
 }

@@ -50,34 +50,7 @@ public class RegisterController implements Initializable {
     
     // Create user class
     User user = new User();
-    MessageBundle message = new MessageBundle();
-    
-    /* This is performed then the user have pressed the register button in order to try and register as a user,
-       if that is not the case the user will get different error messages to try and help him out.
-    */
-    
-    // This is performed when the user wants to know if the username is already taken
-    /*@FXML
-    public void checkAction(ActionEvent event) throws IOException {
-        
-        
-    }*/
-    
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Change the language of objects in RegisterView.fxml
-        tittleLabel.setText(message.retriveText("register.tittle"));                            // Window TopText
-        firstNameField.setPromptText(message.retriveText("register.firstname"));                // FirstName Field
-        lastNameField.setPromptText(message.retriveText("register.lastname"));                  // LastName Field
-        emailField.setPromptText(message.retriveText("register.email"));                        // Email Field
-        usernameField.setPromptText(message.retriveText("register.username"));                  // Username Field
-        usernameCheckLabel.setText(message.retriveText("register.usernameLabel"));         		// UsernameCheck Label     
-        checkBtn.setText(message.retriveText("register.usernameCheckBtn"));						// Check Btn
-        passwordField.setPromptText(message.retriveText("register.password"));					// Password Field
-        passwordVerifyField.setPromptText(message.retriveText("register.passwordVerify"));		// PasswordVerify Field
-        creatBtn.setText(message.retriveText("register.btn"));									// Creat Btn
-        backBtn.setText(message.retriveText("register.backBtn"));								// Back Btn
-    }
+    MessageBundle messageBundle = new MessageBundle();
     
     /**
      * Initialized by the Login Manager (LoginManager.java)
@@ -97,17 +70,17 @@ public class RegisterController implements Initializable {
             	// If username field is empty
                 if (usernameField.getText().trim().isEmpty()) {
                     usernameCheckLabel.setTextFill(Color.web("#ff0000"));
-                    usernameCheckLabel.setText(message.retriveText("register.username.missingfield"));
+                    usernameCheckLabel.setText(messageBundle.retriveText("register.username.missingfield"));
                 }
                 
                 // When the username is taken
                 else if (user.checkUsername(usernameField.getText().trim())) {
                     usernameCheckLabel.setTextFill(Color.web("#ff0000"));
-                    usernameCheckLabel.setText(message.retriveText("register.usernameCheckTrue"));
+                    usernameCheckLabel.setText(messageBundle.retriveText("register.usernameCheckTrue"));
                 
                 } else {
                     usernameCheckLabel.setTextFill(Color.web("#00b120"));
-                    usernameCheckLabel.setText(message.retriveText("register.usernameCheckFalse"));
+                    usernameCheckLabel.setText(messageBundle.retriveText("register.usernameCheckFalse"));
                 }
             	
             }
@@ -127,30 +100,30 @@ public class RegisterController implements Initializable {
                     passwordField.getText().trim().isEmpty()  || passwordVerifyField.getText().trim().isEmpty()) 
                 {   
                 	usernameCheckLabel.setText("");
-                	errorLabel.setText(message.retriveText("login.error.missingFields"));
+                	errorLabel.setText(messageBundle.retriveText("login.error.missingFields"));
                 
                 // If email is not valid
                 } else if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
                 	usernameCheckLabel.setText("");
-                	errorLabel.setText(message.retriveText("register.error.email"));
+                	errorLabel.setText(messageBundle.retriveText("register.error.email"));
                     
                 // If passwords are not the same
                 } else if (!passwordField.getText().trim().equals(passwordVerifyField.getText().trim()) ) {
                 	usernameCheckLabel.setText("");
-                	errorLabel.setText(message.retriveText("register.error.password"));
+                	errorLabel.setText(messageBundle.retriveText("register.error.password"));
                     passwordField.clear();
                     passwordVerifyField.clear();
                 
                 // If username is taken
                 } else if (user.checkUsername(usernameField.getText().trim())) {
                 	usernameCheckLabel.setText("");
-                	errorLabel.setText(message.retriveText("register.usernameCheckTrue"));
+                	errorLabel.setText(messageBundle.retriveText("register.usernameCheckTrue"));
                    
                 // If registration was successful 
                 } else { 
                 	loginManager.showLoginScreen(); // Go to loginScreen and give a congratulation message with your username
-                	JOptionPane.showMessageDialog(null, message.retriveText("login.successful.register.part1") + " " + 
-                	usernameField.getText().trim() + " " + message.retriveText("login.successful.register.part2"));
+                	JOptionPane.showMessageDialog(null, messageBundle.retriveText("login.successful.register.part1") + " " + 
+                	usernameField.getText().trim() + " " + messageBundle.retriveText("login.successful.register.part2"));
                 }
             	
             }
@@ -167,6 +140,22 @@ public class RegisterController implements Initializable {
             }
         });
         
+    }
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Change the language of objects in RegisterView.fxml
+        tittleLabel.setText(messageBundle.retriveText("register.tittle"));                            // Window TopText
+        firstNameField.setPromptText(messageBundle.retriveText("register.firstname"));                // FirstName Field
+        lastNameField.setPromptText(messageBundle.retriveText("register.lastname"));                  // LastName Field
+        emailField.setPromptText(messageBundle.retriveText("register.email"));                        // Email Field
+        usernameField.setPromptText(messageBundle.retriveText("register.username"));                  // Username Field
+        usernameCheckLabel.setText(messageBundle.retriveText("register.usernameLabel"));         		// UsernameCheck Label     
+        checkBtn.setText(messageBundle.retriveText("register.usernameCheckBtn"));						// Check Btn
+        passwordField.setPromptText(messageBundle.retriveText("register.password"));					// Password Field
+        passwordVerifyField.setPromptText(messageBundle.retriveText("register.passwordVerify"));		// PasswordVerify Field
+        creatBtn.setText(messageBundle.retriveText("register.btn"));									// Creat Btn
+        backBtn.setText(messageBundle.retriveText("register.backBtn"));								// Back Btn
     }
 
 }

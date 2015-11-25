@@ -50,13 +50,7 @@ public class MainController implements Initializable {
 	@FXML private Button addFriendBtn;
 	
 	// Internationalization
-	MessageBundle message = new MessageBundle();
- 	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+	MessageBundle messageBundle = new MessageBundle();
 
 	/**
      * Initialized by the Login Manager (LoginManager.java)
@@ -80,7 +74,7 @@ public class MainController implements Initializable {
                     Parent root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/GameView.fxml"));
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
-                    stage.setTitle(message.retriveText("login.topText"));
+                    stage.setTitle(messageBundle.retriveText("login.topText"));
                     stage.getIcons().add(icon);
                     stage.show();
                 } catch (IOException e) {
@@ -101,5 +95,11 @@ public class MainController implements Initializable {
             }
         });
     }
+    
+    @Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
