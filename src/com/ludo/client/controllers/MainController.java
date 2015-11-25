@@ -115,7 +115,7 @@ public class MainController implements Initializable {
         });
         
         // Listen for incoming messages
-        while(true) {
+        /*while(true) {
             
             // Try reading from server
             try {
@@ -133,7 +133,7 @@ public class MainController implements Initializable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }
+        }*/
     }
     
     @Override
