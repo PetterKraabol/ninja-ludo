@@ -79,7 +79,11 @@ public class LoginController implements Initializable {
         		
         		// Check if username and password are correct
 				if(loginManager.authenticate(username, password)) {
-				    loginManager.showMainView();
+				    try {
+                        loginManager.showMainView();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 				} else {
 				    errorLabel.setText(messageBundle.retriveText("login.error.loginDenied"));
 				}

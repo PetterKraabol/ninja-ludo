@@ -19,6 +19,7 @@ import com.ludo.i18n.MessageBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class LoginManager {
@@ -193,7 +194,7 @@ public class LoginManager {
     /**
      * Switch to main view
      */
-    public void showMainView() {
+    public void showMainView() throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/MainView.fxml"));
             scene.setRoot((Parent) loader.load());
@@ -202,7 +203,10 @@ public class LoginManager {
             
             // Main View Controller
             MainController controller = loader.<MainController>getController();
-            controller.initManager(this, this.in, this.out);
+            controller.initManager(this, this.out);
+            
+            new ChatHandler(controller.getTextArea(), in).start();
+            
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);
@@ -234,6 +238,40 @@ public class LoginManager {
      *
      */
     private static class ChatHandler extends Thread {
+        private TextArea chat;
+        private String request;
+        private String[] args;
+        private BufferedReader in;
+        
+        public ChatHandler(TextArea chat, BufferedReader in) {
+            this.chat = chat;
+            this.in = in;
+        }
+        
+        public void run() {
+            
+        // Listen for incoming messages
+        while(true) {
+            
+            // Try reading from server
+            try {
+                this.request = this.in.readLine();
+                
+                if(request.startsWith("MESSAGE")) {
+                    this.args = this.request.split(" ");
+                    
+                    // Add text to chat
+                    this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1));
+                    
+                }
+                
+            } catch (IOException e) {
+                System.out.println("Couldn't listen for incoming server messages for chat");
+                e.printStackTrace();
+            }
+        }
+            
+        }
         
     }
 }

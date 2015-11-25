@@ -60,10 +60,7 @@ public class MainController implements Initializable {
      * @param in Input from server
      * @param out Output to server
      */
-    public void initManager(LoginManager loginManager, BufferedReader in, PrintWriter out) {
-        
-        String request;
-        String[] args;
+    public void initManager(LoginManager loginManager, PrintWriter out) {
         
         /**
          * New Game Button
@@ -103,6 +100,8 @@ public class MainController implements Initializable {
             
             @Override
             public void handle(ActionEvent event) {
+                
+                // If chat input is not empty
                 if(!globalChatTextField.getText().trim().isEmpty()) {
                     
                     // Send message to server
@@ -113,27 +112,6 @@ public class MainController implements Initializable {
                 }
             }
         });
-        
-        // Listen for incoming messages
-        /*while(true) {
-            
-            // Try reading from server
-            try {
-                request = in.readLine();
-                
-                if(request.startsWith("MESSAGE")) {
-                    args = request.split(" ");
-                    
-                    // Add text to chat
-                    globalChatTextArea.appendText(args[1] + ": " + request.substring("MESSAGE ".length() + args[1].length() + 1));
-                    
-                }
-                
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }*/
     }
     
     @Override
@@ -141,5 +119,13 @@ public class MainController implements Initializable {
 		// TODO Auto-generated method stub
 		
 	}
+    
+    /**
+     * Return chat window TextArea
+     * @return TextArea Chat
+     */
+    public TextArea getTextArea() {
+        return globalChatTextArea;
+    }
 
 }
