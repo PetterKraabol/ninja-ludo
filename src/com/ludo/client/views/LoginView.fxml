@@ -11,10 +11,10 @@
 
 <AnchorPane prefHeight="293.0" prefWidth="277.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ludo.client.controllers.LoginController">
    <children>
-      <Button fx:id="loginBtn" layoutX="111.0" layoutY="144.0" mnemonicParsing="false" onAction="#loginAction" text="Sign in" />
+      <Button fx:id="loginBtn" layoutX="111.0" layoutY="144.0" mnemonicParsing="false" text="Sign in" />
       <TextField fx:id="usernameField" layoutX="64.0" layoutY="80.0" promptText="Username" />
       <PasswordField fx:id="passwordField" layoutX="64.0" layoutY="109.0" promptText="Password" />
-      <Button fx:id="registerBtn" layoutX="142.0" layoutY="229.0" mnemonicParsing="false" onAction="#registerAction" text="Sign up" />
+      <Button fx:id="registerBtn" layoutX="142.0" layoutY="229.0" mnemonicParsing="false" text="Sign up" />
       <Label fx:id="welcomeLabel" alignment="CENTER" layoutY="26.0" prefHeight="34.0" prefWidth="277.0" text="Welcome to NinjaLudo">
          <font>
             <Font size="23.0" />
@@ -22,7 +22,7 @@
       </Label>
       <Label fx:id="registerLabel" alignment="CENTER_RIGHT" layoutX="3.0" layoutY="233.0" prefHeight="17.0" prefWidth="134.0" text="Not a user?" />
       <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="188.0" prefHeight="17.0" prefWidth="277.0" textAlignment="CENTER" textFill="RED" textOverrun="CENTER_WORD_ELLIPSIS" />
-      <Button fx:id="noImageBtn" layoutX="87.0" layoutY="260.0" mnemonicParsing="false" onAction="#noChangeAction" prefHeight="17.0" prefWidth="33.0">
+      <Button fx:id="noImageBtn" layoutX="87.0" layoutY="260.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="33.0">
          <graphic>
             <ImageView disable="true" fitHeight="20.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -30,7 +30,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="usImageBtn" layoutX="146.0" layoutY="260.0" mnemonicParsing="false" onAction="#usChangeAction">
+      <Button fx:id="usImageBtn" layoutX="146.0" layoutY="260.0" mnemonicParsing="false">
          <graphic>
             <ImageView fx:id="usImageView" fitHeight="20.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                <image>

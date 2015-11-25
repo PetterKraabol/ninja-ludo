@@ -9,10 +9,12 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import com.ludo.client.LoginManager;
 import com.ludo.client.User;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,34 +31,22 @@ import javafx.stage.Stage;
 public class RegisterController implements Initializable {
     
     // FXML Fields
-    @FXML
-    private TextField firstNameField;
-    @FXML
-    private TextField lastNameField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private PasswordField passwordVerifyField;
+    @FXML private TextField firstNameField;
+    @FXML private TextField lastNameField;
+    @FXML private TextField emailField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField passwordVerifyField;
 
     // FXML Labels
-    @FXML
-    private Label tittleLabel;
-    @FXML
-    private Label usernameCheckLabel;
-    @FXML
-    private Label errorLabel;
+    @FXML private Label tittleLabel;
+    @FXML private Label usernameCheckLabel;
+    @FXML private Label errorLabel;
     
     // FXML Buttons
-    @FXML
-    private Button checkBtn;
-    @FXML
-    private Button creatBtn;
-    @FXML
-    private Button backBtn;
+    @FXML private Button checkBtn;
+    @FXML private Button creatBtn;
+    @FXML private Button backBtn;
     
     // Create user class
     User user = new User();
@@ -65,7 +55,7 @@ public class RegisterController implements Initializable {
     /* This is performed then the user have pressed the register button in order to try and register as a user,
        if that is not the case the user will get different error messages to try and help him out.
     */
-    @FXML
+    /*@FXML
     public void registerAction(ActionEvent event) throws IOException {
         
         // Check if all Fields are filled inn
@@ -99,10 +89,10 @@ public class RegisterController implements Initializable {
             
             JOptionPane.showMessageDialog(null, message.retriveText("login.successful.register"));
         }
-    }
+    }*/
     
     // This is performed when the user wants to know if the username is already taken
-    @FXML
+    /*@FXML
     public void checkAction(ActionEvent event) throws IOException {
         
         // If username field is empty
@@ -120,18 +110,7 @@ public class RegisterController implements Initializable {
             usernameCheckLabel.setTextFill(Color.web("#00b120"));
             usernameCheckLabel.setText(message.retriveText("register.usernameCheckFalse"));
         }
-    }
-    
-    // This is performed when the user want's to go back to the login screen/view
-    @FXML
-    public void backAction(ActionEvent event) throws IOException {
-        Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
-        Scene client_page_scene = new Scene(client_page_parent);
-        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        app_stage.setScene(client_page_scene);
-        app_stage.setTitle(message.retriveText("login.topText"));
-        app_stage.show();
-    }
+    }*/
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -147,6 +126,48 @@ public class RegisterController implements Initializable {
         passwordVerifyField.setPromptText(message.retriveText("register.passwordVerify"));
         creatBtn.setText(message.retriveText("register.btn"));
         backBtn.setText(message.retriveText("register.backBtn"));
+    }
+    
+    /**
+     * Initialized by the Login Manager (LoginManager.java)
+     * This function sets up necessary event handlers for the view.
+     * @param loginManager
+     */
+    public void initManager(LoginManager loginManager) {
+        
+        /**
+         * Check username availability button
+         */
+        checkBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Check name");
+            }
+        });
+        
+        /**
+         * Register user button
+         */
+        creatBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Register user");
+            }
+        });
+        
+        /**
+         * Go back to login screen
+         */
+        backBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                loginManager.showLoginScreen();
+            }
+        });
+        
     }
 
 }

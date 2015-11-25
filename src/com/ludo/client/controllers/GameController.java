@@ -22,73 +22,47 @@ import javafx.scene.shape.Ellipse;
 public class GameController implements Initializable{
 
 	// FXML Fields
-	@FXML
-	private TextArea gameChatTextArea;
-	@FXML
-	private TextField commentTextField;
+	@FXML private TextArea gameChatTextArea;
+	@FXML private TextField commentTextField;
 	
 	// FXML Labels
-	@FXML
-	private Label chatLabel;
-	@FXML
-	private Label usernameRedLabel;
-	@FXML
-	private Label usernameBlueLabel;
-	@FXML
-	private Label usernameGreenLabel;
-	@FXML
-	private Label usernameYellowLabel;
+	@FXML private Label chatLabel;
+	@FXML private Label usernameRedLabel;
+	@FXML private Label usernameBlueLabel;
+	@FXML private Label usernameGreenLabel;
+	@FXML private Label usernameYellowLabel;
 	
 	// FXML Buttons
-	@FXML
-	private Button writeBtn;
-	@FXML
-	private Button gameBtn;
+	@FXML private Button writeBtn;
+	@FXML private Button gameBtn;
 	
 	
 	// FXML Bricks
-	@FXML
-	private Circle redBrick1;
-	@FXML
-	private Circle redBrick2;
-	@FXML
-	private Circle redBrick3;
-	@FXML
-	private Circle redBrick4;
+	@FXML private Circle redBrick1;
+	@FXML private Circle redBrick2;
+	@FXML private Circle redBrick3;
+	@FXML private Circle redBrick4;
 	
 	// Blue bricks
-	@FXML
-	private Circle blueBrick1;
-	@FXML
-	private Circle blueBrick2;
-	@FXML
-	private Circle blueBrick3;
-	@FXML
-	private Circle blueBrick4;
+	@FXML private Circle blueBrick1;
+	@FXML private Circle blueBrick2;
+	@FXML private Circle blueBrick3;
+	@FXML private Circle blueBrick4;
 	
 	// Blue bricks
-	@FXML
-	private Circle greenBrick1;
-	@FXML
-	private Circle greenBrick2;
-	@FXML
-	private Circle greenBrick3;
-	@FXML
-	private Circle greenBrick4;
+	@FXML private Circle greenBrick1;
+	@FXML private Circle greenBrick2;
+	@FXML private Circle greenBrick3;
+	@FXML private Circle greenBrick4;
 	
 	// Blue bricks
-	@FXML
-	private Circle yellowBrick1;
-	@FXML
-	private Circle yellowBrick2;
-	@FXML
-	private Circle yellowBrick3;
-	@FXML
-	private Circle yellowBrick4;
+	@FXML private Circle yellowBrick1;
+	@FXML private Circle yellowBrick2;
+	@FXML private Circle yellowBrick3;
+	@FXML private Circle yellowBrick4;
 	
 	// FXML Ellipse
-	@FXML
-	private Ellipse turneIndicatorEllipse;
+	@FXML private Ellipse turneIndicatorEllipse;
 	
 	
 	// color variable

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.ludo.client.controllers.LoginController;
 import com.ludo.client.controllers.MainController;
+import com.ludo.client.controllers.RegisterController;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,6 +57,20 @@ public class LoginManager {
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);
+        }
+    }
+
+    public void showRegistrationView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
+            scene.setRoot((Parent) loader.load());
+            
+            // Main View Controller
+            RegisterController controller = loader.<RegisterController>getController();
+            controller.initManager(this);
+        } catch(IOException e) {
+            // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Error showing registration view: " + e);
         }
     }
 }

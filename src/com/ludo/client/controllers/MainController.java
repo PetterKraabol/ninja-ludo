@@ -27,65 +27,30 @@ import javafx.stage.Stage;
 public class MainController implements Initializable {
 
 	// FXML Labels
-	@FXML
-	private Label globalChatLabel;
-	@FXML
-	private Label friendChatLabel;
+	@FXML private Label globalChatLabel;
+	@FXML private Label friendChatLabel;
 	
 	// FXML Tab
-	@FXML
-	private Tab friendTab;
-	@FXML
-	private Tab chatTab;
+	@FXML private Tab friendTab;
+	@FXML private Tab chatTab;
 	
 	// FXML TextArea
-	@FXML
-	private TextArea globalChatTextArea;
-	@FXML
-	private TextArea friendTextArea;
-	@FXML
-	private TextArea chatTextArea;
+	@FXML private TextArea globalChatTextArea;
+	@FXML private TextArea friendTextArea;
+	@FXML private TextArea chatTextArea;
 	
 	// FXML TextField
-	@FXML
-	private TextField globalChatTextField;
-	@FXML
-	private TextField friendTextField;
+	@FXML private TextField globalChatTextField;
+	@FXML private TextField friendTextField;
 	
 	// FXML Buttons
-	@FXML
-	private Button logoutBtn;
-	@FXML
-	private Button newGameBtn;
-	@FXML
-	private Button writeBtn;
-	@FXML
-	private Button addFriendBtn;
+	@FXML private Button logoutBtn;
+	@FXML private Button newGameBtn;
+	@FXML private Button writeBtn;
+	@FXML private Button addFriendBtn;
 	
+	// Internationalization
 	MessageBundle message = new MessageBundle();
-	
-	/*@FXML
-	public void logoutAction(ActionEvent event) throws IOException {
-		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
-		Scene client_page_scene = new Scene(client_page_parent);
-		Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		app_stage.setScene(client_page_scene);
-		app_stage.setTitle(message.retriveText("login.topText"));
-		app_stage.show();
-	}*/
-	
-	@FXML
-	public void newGameAction(ActionEvent event) throws IOException {
-		
-		Image icon = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
-		Stage stage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/GameView.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle(message.retriveText("login.topText"));
-        stage.getIcons().add(icon);
-        stage.show();
-	}
  	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -93,8 +58,37 @@ public class MainController implements Initializable {
 		
 	}
 
+	/**
+     * Initialized by the Login Manager (LoginManager.java)
+     * This function sets up necessary event handlers for the view.
+     * @param loginManager
+     * @param sessionID
+     */
     public void initSessionID(LoginManager loginManager, String sessionID) {
         globalChatLabel.setText(sessionID);
+        
+        /**
+         * New Game Button
+         */
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    Image icon = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
+                    Stage stage = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/GameView.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.setTitle(message.retriveText("login.topText"));
+                    stage.getIcons().add(icon);
+                    stage.show();
+                } catch (IOException e) {
+                    System.out.println("Error creating new game window: " + e);
+                }
+            }
+            
+        });
         
         /**
          * Logout button

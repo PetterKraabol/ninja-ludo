@@ -41,8 +41,8 @@
                   <Image url="@../../resources/icon.png" />
                </image>
             </ImageView>
-            <Button id="logoutButton" fx:id="logoutBtn" layoutX="137.0" layoutY="568.0" mnemonicParsing="false" text="Sign out" />
-            <Button fx:id="newGameBtn" layoutX="131.0" layoutY="355.0" mnemonicParsing="false" onAction="#newGameAction" text="New game" />
+            <Button id="logoutBtn" fx:id="logoutBtn" layoutX="137.0" layoutY="568.0" mnemonicParsing="false" text="Sign out" />
+            <Button id="newGameBtn" fx:id="newGameBtn" layoutX="131.0" layoutY="355.0" mnemonicParsing="false" text="New game" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="621.0" prefHeight="607.0" prefWidth="290.0">

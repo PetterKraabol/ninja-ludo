@@ -32,29 +32,19 @@ import javafx.stage.Stage;
 public class LoginController implements Initializable {
 	
 	// FXML Fields
-	@FXML
-	private TextField usernameField;
-	@FXML
-	private PasswordField passwordField;
+	@FXML private TextField usernameField;
+	@FXML private PasswordField passwordField;
 	
 	// FXML Labels
-	@FXML
-	private Label welcomeLabel;
-	@FXML
-	private Label errorLabel;
-	@FXML
-	private Label registerLabel;
+	@FXML private Label welcomeLabel;
+	@FXML private Label errorLabel;
+	@FXML private Label registerLabel;
 	
 	// FXML Buttons
-	@FXML
-	private Button loginBtn;
-	@FXML
-	private Button registerBtn;
-	@FXML
-	private Button noImageBtn;
-	@FXML
-	private Button usImageBtn;
-	
+	@FXML private Button loginBtn;
+	@FXML private Button registerBtn;
+	@FXML private Button noImageBtn;
+	@FXML private Button usImageBtn;
 	private String serverAdress;
 	
 	// Create user class
@@ -68,7 +58,7 @@ public class LoginController implements Initializable {
 	
 	
 	
-	@FXML
+	/*@FXML
 	public void loginAction(ActionEvent event) throws IOException {
 		
 		String line;
@@ -117,8 +107,9 @@ public class LoginController implements Initializable {
 			}
 		}
 	}
+	*/
 	
-	@FXML
+	/*@FXML
 	public void registerAction(ActionEvent event) throws IOException {
 		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
 		Scene client_page_scene = new Scene(client_page_parent);
@@ -139,18 +130,7 @@ public class LoginController implements Initializable {
 		app_stage.setTitle(message.retriveText("login.topText"));
 		app_stage.show();
 	}
-	
-	@FXML
-	public void usChangeAction(ActionEvent event) throws IOException {
-		message.Message("us");
-		
-		Parent client_page_parent = FXMLLoader.load(getClass().getResource("/com/ludo/client/views/LoginView.fxml"));
-		Scene client_page_scene = new Scene(client_page_parent);
-		Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		app_stage.setScene(client_page_scene);
-		app_stage.setTitle(message.retriveText("login.topText"));
-		app_stage.show();
-	}
+	*/
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -191,8 +171,16 @@ public class LoginController implements Initializable {
         registerBtn.setText(message.retriveText("login.registerBtn"));		// Register Button 
 	}
 
+	/**
+     * Initialized by the Login Manager (LoginManager.java)
+     * This function sets up necessary event handlers for the view.
+     * @param loginManager
+     */
     public void initManager(final LoginManager loginManager) {
         
+        /**
+         * Login Button
+         */
         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
            
             @Override
@@ -204,6 +192,39 @@ public class LoginController implements Initializable {
             }
         });
         
+        /**
+         * Register button
+         */
+        registerBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                loginManager.showRegistrationView();
+            }
+        });
+        
+        /**
+         * Change language to Norwegian
+         */
+        noImageBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Change to Norwegian");
+            }
+        });
+        
+        /**
+         * Change language to English
+         */
+        noImageBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Change to English");
+            }
+        });
+        
     }
     
     /**
@@ -211,16 +232,7 @@ public class LoginController implements Initializable {
      * @return
      */
     private String authorize() {
-        return usernameField.getText() + ":" + passwordField.getText();
+        return usernameField.getText() + " " + passwordField.getText();
     }
-    
-    private static int sessionID = 0;
-    
-    private String generateSessionID() {
-        sessionID++;
-        return usernameField.getText() + " " + sessionID;
-    }
-
-	
 
 }
