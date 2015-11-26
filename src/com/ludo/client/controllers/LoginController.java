@@ -32,12 +32,14 @@ public class LoginController implements Initializable {
 	@FXML private Label welcomeLabel;
 	@FXML private Label errorLabel;
 	@FXML private Label registerLabel;
+	@FXML private Label serverLabel;
 	
 	// FXML Buttons
 	@FXML private Button loginBtn;
 	@FXML private Button registerBtn;
 	@FXML private Button noImageBtn;
 	@FXML private Button usImageBtn;
+	@FXML private Button serverAddressBtn;
 	
 	// Create user class
 	MessageBundle messageBundle = new MessageBundle();
