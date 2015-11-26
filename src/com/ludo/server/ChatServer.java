@@ -17,7 +17,7 @@ import com.ludo.config.Config;
  * @author Petter
  *
  */
-public class ChatServer {
+public class ChatServer extends Thread {
     
     /**
      * Configurations
@@ -40,6 +40,11 @@ public class ChatServer {
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     
     /**
+     * Server Socket
+     */
+    ServerSocket listener;
+    
+    /**
      * The chat server constructor listens for new connections on
      * a specified port and creates new Handler objects
      * to handle server communications.
@@ -52,16 +57,30 @@ public class ChatServer {
         
         System.out.println("Chat server running on port " + port);
         
+    }
+    
+    public void run() {
+        
         // Open server socket for specified port.
-        ServerSocket listener = new ServerSocket(port);
+        try {
+            this.listener = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         // On new connections, start a new thread to handle communications.
         try {
             while(true) {
-                new Handler(listener.accept()).start();
+                new Handler(this.listener.accept()).start();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            listener.close();
+            try {
+                this.listener.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     

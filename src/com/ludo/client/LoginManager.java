@@ -216,11 +216,11 @@ public class LoginManager {
     }
     
     /**
-     * Connect to remote server
+     * Connect to remote chat server
      * @param Boolean useConfig WHether the program should use the config file or not to find IP address
-     * @return Socket socket connection to server
+     * @return Socket socket connection to chat server
      */
-    public Socket connectToServer(Boolean useConfig) {
+    private Socket connectToServer(Boolean useConfig) {
         Socket socket = null;
         
         // Connect to server
@@ -233,7 +233,7 @@ public class LoginManager {
             System.out.println("Unknown Host");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Error connecting to server");
+            System.out.println("Error connecting to chat server");
             e.printStackTrace();
         }
         
@@ -260,7 +260,7 @@ public class LoginManager {
      * Ask for Server IP Address
      * @return String IP Address
      */
-    public String askForIPAddress(Boolean useConfig) {
+    private String askForIPAddress(Boolean useConfig) {
         
         if(useConfig && config.getConfig("ipaddress") != null && !config.getConfig("ipaddress").equals("null")) {
             return config.getConfig("ipaddress");
@@ -347,15 +347,11 @@ public class LoginManager {
         }
         
         /**
-         * "Kill" process
+         * "Kill" thread
          */
         public void kill() {
             System.out.println("Killing thread");
             this.running = false;
-        }
-        
-        private Boolean alive() {
-            return this.running;
         }
         
         /**
@@ -364,7 +360,7 @@ public class LoginManager {
         public void run() {
             
             // Listen for incoming messages while thread is running
-            while(alive()) {
+            while(this.running) {
                 
                 // Try reading from server
                 try {
@@ -385,7 +381,6 @@ public class LoginManager {
                 } catch (IOException e) {
                     System.out.println("Lost connection to chat server.");
                     break;
-                    //e.printStackTrace();
                 }
             }
             
