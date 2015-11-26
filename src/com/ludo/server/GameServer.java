@@ -1,6 +1,9 @@
 package com.ludo.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
@@ -40,6 +43,8 @@ public class GameServer extends Thread {
                 
                 game.addPlayers(players);
                 
+                game.broadcast("STARTGAME");
+                
                 game.start();
                 
                 games.add(game);
@@ -66,6 +71,19 @@ public class GameServer extends Thread {
         
         public void addPlayers(Player[] players) {
             this.players = players;
+        }
+        
+        /**
+         * Broadcast a message to all players in a game session
+         * @param message Broadcast message
+         * @throws IOException Connection exceptions
+         */
+        private void broadcast(String message) throws IOException {
+            
+            // For every player in session; send the message
+            for(Player player : players) {
+                player.getOut().println(message);
+            }
         }
         
         /**
@@ -130,13 +148,54 @@ public class GameServer extends Thread {
             Piece[] pieces = new Piece[4];
             String color;
             Socket socket;
+            PrintWriter out;
+            BufferedReader in;
             
             public Player(Socket socket, String color) {
+                
+                // Color
                 this.color = color;
+                
+                // Socket
                 this.socket = socket;
+                
+                // Output
+                try {
+                    this.out = new PrintWriter(this.socket.getOutputStream(), true);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                
+                // Input
+                try {
+                    this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 
             }
             
+            /**
+             * Return player socket
+             * @return socket
+             */
+            public Socket getSocket() {
+                return this.socket;
+            }
+            
+            /**
+             * Return player output writer
+             * @return
+             */
+            public PrintWriter getOut() {
+                return this.out;
+            }
+            
+            /**
+             * Thread running
+             */
             public void run() {
                 
             }

@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.ludo.client.Coordinates;
-import com.ludo.client.GameManager;
+import com.ludo.client.ClientManager;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -185,7 +184,7 @@ public class GameController implements Initializable{
      * @param gameManager
      * @param out
      */
-    public void initManager(GameManager gameManager, PrintWriter out) {
+    public void initManager(ClientManager clientManager, PrintWriter out) {
         System.out.println("GameView->initManager");
     }
 

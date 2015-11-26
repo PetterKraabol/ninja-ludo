@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.ludo.client.GameManager;
+import com.ludo.client.ClientManager;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.fxml.FXML;
@@ -29,7 +29,8 @@ public class GameQueueController implements Initializable{
      * @param gameManager
      * @param out
      */
-    public void initManager(GameManager gameManager, PrintWriter out) {
+    public void initManager(ClientManager clientManager, PrintWriter out) {
+        
         System.out.println("GameQueueView->initManager");
     }
     

@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import com.ludo.client.LoginManager;
+import com.ludo.client.ClientManager;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
@@ -47,9 +47,9 @@ public class LoginController implements Initializable {
 	/**
      * Initialized by the Login Manager (LoginManager.java)
      * This function sets up necessary event handlers for the view.
-     * @param loginManager
+     * @param clientManager
      */
-    public void initManager(final LoginManager loginManager) {
+    public void initManager(final ClientManager clientManager) {
         
         /**
          * Login Button
@@ -69,12 +69,12 @@ public class LoginController implements Initializable {
         		}
         		
         		// Check if username and password are correct
-				int response = loginManager.authenticate(username, password);
+				int response = clientManager.authenticate(username, password);
 				
 				// Success
         		if(response == 0) {
 				    try {
-                        loginManager.showMainView();
+                        clientManager.showMainScreen();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -112,7 +112,7 @@ public class LoginController implements Initializable {
                 System.out.println("Not empty");
                 
                 // Check if username and password are correct
-                int response = loginManager.register(username, password);
+                int response = clientManager.register(username, password);
                 
                 // Success
                 if(response == 0) {
@@ -120,9 +120,9 @@ public class LoginController implements Initializable {
                     JOptionPane.showMessageDialog(null, messageBundle.retriveText("registration.complete") + ": " + username);
                     
                     // Authenticate and switch to main view
-                    if(loginManager.authenticate(username, password) == 0) {
+                    if(clientManager.authenticate(username, password) == 0) {
                         try {
-                            loginManager.showMainView();
+                            clientManager.showMainScreen();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -149,7 +149,7 @@ public class LoginController implements Initializable {
             public void handle(ActionEvent event) {
                 
                 // Show change IP dialogue
-                loginManager.changeServerIP();
+                clientManager.changeServerIP();
                 
                 // Display IP address in label
                 serverLabel.setText(messageBundle.retriveText("login.ipaddress") + ": " + config.getConfig("ipaddress"));
@@ -167,7 +167,7 @@ public class LoginController implements Initializable {
                 System.out.println("Change to Norwegian");
                 config.setConfig("language", "no");
                 config.setConfig("country", "NO");
-                loginManager.showLoginScreen();
+                clientManager.showLoginScreen();
             }
         });
         
@@ -181,7 +181,7 @@ public class LoginController implements Initializable {
                 System.out.println("Change to English");
                 config.setConfig("language", "en");
                 config.setConfig("country", "US");
-                loginManager.showLoginScreen();
+                clientManager.showLoginScreen();
             }
         });
         

@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.ludo.client.LoginManager;
+import com.ludo.client.ClientManager;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.event.ActionEvent;
@@ -48,11 +48,11 @@ public class MainController implements Initializable {
 	/**
      * Initialized by the Login Manager (LoginManager.java)
      * This function sets up necessary event handlers for the view.
-     * @param loginManager
+     * @param clientManager
      * @param in Input from server
      * @param out Output to server
      */
-    public void initManager(LoginManager loginManager, PrintWriter out) {
+    public void initManager(ClientManager clientManager, PrintWriter out) {
         
         /**
          * New Game Button
@@ -61,7 +61,7 @@ public class MainController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                loginManager.startNewGame();
+                clientManager.showGameQueue();
             }
             
         });
@@ -73,7 +73,7 @@ public class MainController implements Initializable {
             
             @Override
             public void handle(ActionEvent event) {
-                loginManager.logout();
+                clientManager.logout();
             }
         });
         
