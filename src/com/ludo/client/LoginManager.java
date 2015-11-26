@@ -73,8 +73,47 @@ public class LoginManager {
         
     }
     
+    public int register(String username, String password) {
+        
+        // Send register request to server with username and password
+        this.out.println("REGISTER " + username + " " + password);
+        
+        // Listen for response from server
+        String line = null;
+        
+        while(true) {
+            
+            // Read server message
+            try {
+                line = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            // Continue if no input
+            if(line == null) {
+                continue;
+            }
+            
+            // Registration accepted
+            if(line.startsWith("REGISTERACCEPTED")) {
+                return 0;
+            }
+            
+            // Username already exists
+            if(line.startsWith("ALREADYEXISTS")) {
+                return 1;
+            }
+            
+        }
+        
+    }
+    
     /**
-     * TODO Description
+     * Authenticate user by sending a login request to the server and wait for a reply
+     * @param username
+     * @param password
+     * @return int Response 0=loginaccepted, 1=logindenied, 2=alreadyloggedin
      */
     public int authenticate(String username, String password) {
         
@@ -91,6 +130,11 @@ public class LoginManager {
                 line = in.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            
+            // Continue if no input
+            if(line == null) {
+                continue;
             }
             
             // Login accepted
