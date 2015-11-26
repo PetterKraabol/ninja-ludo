@@ -400,7 +400,7 @@ public class ClientManager {
     }
     
     /**
-     * ------------------ Game Server
+     * ------------------ Game Server ------------------
      */
     
     /**
@@ -437,7 +437,7 @@ public class ClientManager {
     }
     
     /**
-     * Look for new game
+     * Show the game queue window and put the user in a game queue before starting a game session.
      */
     public void showGameQueue() {
         
@@ -457,11 +457,22 @@ public class ClientManager {
             controller.initManager(this, this.gameOut);
             
             // Wait until game is ready
-            /*while(true) {
+            
+            String line = null;
+            while(true) {
                 
-                String line = this.gameIn.readLine();
+                // Try reading server message
+                try {
+                    line = gameIn.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 
                 if(line == null) {
+                    continue;
+                }
+                
+                if(line.startsWith("WAITING")) {
                     continue;
                 }
                 
@@ -472,9 +483,12 @@ public class ClientManager {
                 if(line.startsWith("STARTGAME")) {
                     System.out.println("Starting game");
                     showGameView();
+                    break;
                 }
                 
-            }*/
+            }
+            
+            showGameView();
             
         } catch(IOException e) {
             System.out.println("Error showing game queue view: " + e);
@@ -532,7 +546,7 @@ public class ClientManager {
         /**
          * Used to indicate if thread is running or not.
          */
-        private Boolean running;
+        private Boolean running = true;
         
         public GameHandler(List<Circle> pieces, BufferedReader in) {
             this.pieces = pieces;
@@ -556,23 +570,23 @@ public class ClientManager {
             while(this.running) {
                 
              // Try reading from server
+                String line = null;
+                
                 try {
-                    String request = this.in.readLine();
-                    
-                    if(request == null) {
-                        continue;
-                    }
-                    
-                    String[] args = request.split(" ");
-                    
-                    // Test message
-                    if(request.startsWith("TEST")) {
-                        System.out.println("TEST from server");
-                        break;
-                    }
-                    
+                    line = this.in.readLine();
                 } catch (IOException e) {
-                    System.out.println("Lost connection to game server.");
+                    System.out.println("Error reading input from game server");
+                }
+                    
+                if(line == null) {
+                    continue;
+                }
+                
+                String[] args = line.split(" ");
+                
+                // Test message
+                if(line.startsWith("TEST")) {
+                    System.out.println("TEST from server");
                     break;
                 }
                 

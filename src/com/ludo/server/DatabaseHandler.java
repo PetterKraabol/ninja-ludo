@@ -46,10 +46,7 @@ public class DatabaseHandler {
      */
     public DatabaseHandler() {
         
-        System.out.println("Database Handler");
-        
-        if(createConnection())
-            System.out.println("Database connection is OK");
+        createConnection();
         
     }
     

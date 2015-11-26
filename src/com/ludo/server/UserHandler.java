@@ -30,10 +30,8 @@ public class UserHandler {
             
             // If user is found, authentication is successful
             if(results.next()) {
-                System.out.println("User Authenticated: " + results.getString("username"));
                 return true;
             } else {
-                System.out.println("Auth failed: " + username);
                 return false;
             }
         } catch (SQLException e) {

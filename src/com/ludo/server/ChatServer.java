@@ -105,7 +105,6 @@ public class ChatServer extends Thread {
          * @param socket
          */
         public Handler(Socket socket) {
-            System.out.println("Handling a new connection");
             this.socket = socket;
         }
         
@@ -157,7 +156,6 @@ public class ChatServer extends Thread {
                             userHandler.newUser(args[1], args[2]);
                             out.println("REGISTERACCEPTED");
                         } else {
-                            System.out.println(args[1] + " is taken");
                             out.println("ALREADYEXISTS");
                         }
                     }
@@ -214,8 +212,6 @@ public class ChatServer extends Thread {
                     
                     // Manual logout from client
                     if(this.request.startsWith("LOGOUT")) {
-                        
-                        System.out.println(this.username + " logged out.");
                         
                         // Remove username from users list
                         if(this.username != null) {
