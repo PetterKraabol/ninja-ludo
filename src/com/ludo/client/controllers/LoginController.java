@@ -141,6 +141,23 @@ public class LoginController implements Initializable {
         });
         
         /**
+         * Change server address
+         */
+        serverAddressBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                
+                // Show change IP dialogue
+                loginManager.changeServerIP();
+                
+                // Display IP address in label
+                serverLabel.setText(messageBundle.retriveText("login.ipaddress") + ": " + config.getConfig("ipaddress"));
+                
+            }
+        });
+        
+        /**
          * Change language to Norwegian
          */
         noImageBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -178,6 +195,16 @@ public class LoginController implements Initializable {
         loginBtn.setText(messageBundle.retriveText("login.btn"));					// Login Button
         registerLabel.setText(messageBundle.retriveText("login.registerText"));	// Register Label
         registerBtn.setText(messageBundle.retriveText("login.registerBtn"));		// Register Button 
+        
+        // IP Address label
+        if(config.getConfig("ipaddress") != null && !config.getConfig("ipaddress").equals("null")) {
+            serverLabel.setText(messageBundle.retriveText("login.ipaddress") + ": " + config.getConfig("ipaddress"));
+        } else {
+            serverLabel.setText(messageBundle.retriveText("login.no.ipaddress"));
+        }
+        
+        serverAddressBtn.setText(messageBundle.retriveText("login.changeip.btn"));
+        
 	}
 
 }

@@ -50,6 +50,7 @@ public class Config {
      * @return
      */
     public String getConfig(String configName) {
+        readFromFile(this.filename);
         return configuration.get(configName);
     }
     

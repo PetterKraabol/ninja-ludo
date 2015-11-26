@@ -40,7 +40,7 @@
          </graphic>
       </Button>
       <Button fx:id="serverAddressBtn" layoutX="69.0" layoutY="335.0" mnemonicParsing="false" text="Change Server Address" />
-      <Label fx:id="serverLabel" alignment="CENTER" layoutX="4.0" layoutY="310.0" prefHeight="17.0" prefWidth="271.0" text="Label" textFill="#ae1717">
+      <Label fx:id="serverLabel" alignment="CENTER" layoutX="4.0" layoutY="310.0" prefHeight="17.0" prefWidth="271.0" text="" textFill="#ae1717">
          <font>
             <Font name="Comic Sans MS Bold Italic" size="12.0" />
          </font>
