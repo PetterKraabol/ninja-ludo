@@ -14,11 +14,15 @@ import com.ludo.client.controllers.MainController;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * LoginManager handles login, registration and chat messages.
@@ -315,9 +319,35 @@ public class LoginManager {
             this.chatThread.start();
             
         } catch(IOException e) {
-            // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);
         }
+    }
+    
+    /**
+     * Look for new game
+     */
+    public void startNewGame() {
+        System.out.println("StartNewGame");
+        Image icon  = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
+        Stage stage = new Stage();
+        Scene scene = new Scene(new StackPane());
+        
+        GameManager gameManager = new GameManager(stage, scene, this.username);
+        
+        
+        stage.setScene(scene);
+        stage.getIcons().add(icon);
+        stage.show();
+        
+        /**
+         * When the user closes the application, make sure it sends LOGOUT to server
+         * so that the server can remove the user from the users list.
+         */
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                gameManager.closeWindow();
+            }
+        });
     }
     
     /**

@@ -61,7 +61,7 @@ public class GameServer extends Thread {
         Player[] players = new Player[4];
         
         public Game() {
-            
+            System.out.println("New Game");
         }
         
         public void addPlayers(Player[] players) {
@@ -77,13 +77,64 @@ public class GameServer extends Thread {
             }
         }
         
+        class Piece {
+            int position;
+            
+            public Piece() {
+                this.position = 0;
+            }
+            
+            /**
+             * Move piece a specified amount of steps from its current location
+             * @param steps
+             * @return boolean if the piece can move or not
+             */
+            public boolean move(int steps) {
+                int targetPos = this.position += steps;
+                
+                // If the user is trying to move the piece past the end.
+                if(targetPos > Integer.parseInt(config.getConfig("mapLength"))) {
+                    return false;
+                }
+                
+                // If piece is in home, a 6 is required to move out
+                else if(isHome() && steps != 6) {
+                    return false;
+                }
+                
+                // Valid move
+                else {
+                    setPosition(targetPos);
+                    return true;
+                }
+            }
+            
+            private void setPosition(int position) {
+                this.position = position;
+            }
+            
+            public int getPosition() {
+                return this.position;
+            }
+            
+            public boolean isHome() {
+                return this.position == 0;
+            }
+            
+            public boolean isDone() {
+                return this.position == Integer.parseInt(config.getConfig("mapLength"));
+            }
+        }
+        
         class Player extends Thread {
+            Piece[] pieces = new Piece[4];
             String color;
             Socket socket;
             
             public Player(Socket socket, String color) {
                 this.color = color;
                 this.socket = socket;
+                
             }
             
             public void run() {

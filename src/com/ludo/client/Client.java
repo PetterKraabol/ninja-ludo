@@ -36,8 +36,9 @@ public class Client extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 loginManager.closeWindow();
+                System.exit(1);
             }
-        }); 
+        });
         
     }
     

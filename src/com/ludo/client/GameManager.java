@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
-import com.ludo.client.controllers.MainController;
+import com.ludo.client.controllers.GameController;
+import com.ludo.client.controllers.GameQueueController;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
@@ -82,12 +84,17 @@ public class GameManager {
         // Scene
         this.scene = scene;
         this.stage = stage;
-        
-        // Display login screen first
-        showGameQueueView();
+        this.username = username;
         
         // Set socket to connect to server.
         this.socket = connectToServer();
+        
+        // Display login screen first
+        try {
+            showGameQueueView();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -100,7 +107,7 @@ public class GameManager {
         // Connect to server
         try {
             
-            // Create new socket connectin with server
+            // Create new socket connecting with server
             socket = new Socket(config.getConfig("ipaddress"), Integer.parseInt(config.getConfig("gamePort")));
             
         } catch (UnknownHostException e) {
@@ -126,16 +133,38 @@ public class GameManager {
     /**
      * Show game queue view
      */
-    public void showGameQueueView() {
+    public void showGameQueueView() throws IOException  {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/GameQueueView.fxml"));
+            scene.setRoot((Parent) loader.load());
+            stage.setTitle("Game");
+            
+            // Main View Controller
+            GameQueueController controller = loader.<GameQueueController>getController();
+            controller.initManager(this, this.out);
+            
+        } catch(IOException e) {
+            System.out.println("Error showing game queue view: " + e);
+        }
+    }
+    
+    /**
+     * Show game view
+     */
+    public void showGameView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/GameView.fxml"));
             scene.setRoot((Parent) loader.load());
             stage.setTitle(messageBundle.retriveText("main.topText"));
             stage.sizeToScene();
             
             // Main View Controller
-            MainController controller = loader.<MainController>getController();
-            //-----controller.initManager(this, this.out);
+            GameController controller = loader.<GameController>getController();
+            controller.initManager(this, this.out);
+            
+            // Start chat thread
+            this.gameThread = new GameHandler(controller.getPieces(), in);
+            this.gameThread.start();
             
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
@@ -143,14 +172,45 @@ public class GameManager {
         }
     }
     
+    /**
+     * On game window close
+     */
+    public void closeWindow() {
+        System.out.println("Game window closed");
+    }
+    
+    /**
+     * Game Handler
+     * TODO Description
+     * @author Petter
+     *
+     */
     private static class GameHandler extends Thread {
-        private Circle[] pieces;
+        
+        /**
+         * List of pieces
+         * 
+         * Index
+         * 1-4   : red
+         * 5-8   : blue
+         * 9-12  : yellow
+         * 13-16 : green
+         */
+        private List<Circle> pieces;
+        
+        /**
+         * Input from server
+         */
         private BufferedReader in;
+        
+        /**
+         * Used to indicate if thread is running or not.
+         */
         private Boolean running;
         
-        public GameHandler(Circle[] pieces, BufferedReader in) {
+        public GameHandler(List<Circle> pieces, BufferedReader in) {
             this.pieces = pieces;
-            this.in= in;
+            this.in = in;
         }
         
         /**
@@ -161,6 +221,9 @@ public class GameManager {
             this.running = false;
         }
         
+        /**
+         * Run thread
+         */
         public void run() {
             
             // Listen for incoming server messages
