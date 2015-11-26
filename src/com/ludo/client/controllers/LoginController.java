@@ -1,34 +1,23 @@
 package com.ludo.client.controllers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
 import com.ludo.client.LoginManager;
-import com.ludo.client.User;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
     
@@ -73,7 +62,7 @@ public class LoginController implements Initializable {
             	
             	// Abort if missing fields
         		if (username.isEmpty() || password.isEmpty()) {
-        			errorLabel.setText(messageBundle.retriveText("register.error.missingFields"));
+        			errorLabel.setText(messageBundle.retriveText("login.error.missingFields"));
         			return;
         		}
         		
@@ -106,7 +95,46 @@ public class LoginController implements Initializable {
            
             @Override
             public void handle(ActionEvent event) {
-                loginManager.showRegistrationView();
+                
+                // Input
+                String username = usernameField.getText().trim();
+                String password = passwordField.getText().trim();
+                
+                // Abort if missing fields
+                if (username.isEmpty() || password.isEmpty()) {
+                    System.out.println("Empty");
+                    errorLabel.setText(messageBundle.retriveText("login.error.missingFields"));
+                    return;
+                }
+                
+                System.out.println("Not empty");
+                
+                // Check if username and password are correct
+                int response = loginManager.register(username, password);
+                
+                // Success
+                if(response == 0) {
+                    // Display registration success message
+                    JOptionPane.showMessageDialog(null, messageBundle.retriveText("registration.complete") + ": " + username);
+                    
+                    // Authenticate and switch to main view
+                    if(loginManager.authenticate(username, password) == 0) {
+                        try {
+                            loginManager.showMainView();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, messageBundle.retriveText("registration.error.auth"));
+                    }
+                }
+                
+                // Username is taken
+                else if(response == 1) {
+                    errorLabel.setText(messageBundle.retriveText("registration.error.usernameTaken"));
+                } else {
+                    
+                }
             }
         });
         

@@ -1,6 +1,5 @@
 package com.ludo.client;
 
-import java.awt.DisplayMode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import com.ludo.client.controllers.LoginController;
 import com.ludo.client.controllers.MainController;
-import com.ludo.client.controllers.RegisterController;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
@@ -22,6 +20,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
+/**
+ * LoginManager handles login, registration and chat messages.
+ * @author Petter
+ *
+ */
 public class LoginManager {
     
     /**
@@ -30,9 +33,13 @@ public class LoginManager {
     private MessageBundle messageBundle = new MessageBundle();
     
     /**
-     * JavaFX
+     * JavaFX Scene
      */
     private Scene scene;
+    
+    /**
+     * JavaFX Stage
+     */
     private Stage stage;
     
     /**
@@ -40,8 +47,14 @@ public class LoginManager {
      */
     private Socket socket;
     
-    // Input and Output from/to server
+    /**
+     * Input from server
+     */
     private BufferedReader in;
+    
+    /**
+     * Output to server
+     */
     private PrintWriter out;
     
     /**
@@ -49,11 +62,15 @@ public class LoginManager {
      */
     private Config config = new Config();
     
-    // Username
-    private String username = null;
+    /**
+     * Username
+     */
+    private String username;
     
-    // Chat thread
-    Thread chatThread = null;
+    /**
+     * Chat thread to handle incoming chat messages
+     */
+    Thread chatThread;
     
     /**
      * Constructor to hold scene and create a socket connection to the server.
@@ -69,10 +86,16 @@ public class LoginManager {
         showLoginScreen();
         
         // Set socket to connect to server.
-        this.socket = connectToServer();
+        this.socket = connectToServer(true);
         
     }
     
+    /**
+     * Attempt to register a user by sending a REGISTER <username> <password> to server
+     * @param username
+     * @param password
+     * @return int Response 0=REGISTERACCEPTED, 1=ALREADYEXISTS
+     */
     public int register(String username, String password) {
         
         // Send register request to server with username and password
@@ -113,12 +136,14 @@ public class LoginManager {
      * Authenticate user by sending a login request to the server and wait for a reply
      * @param username
      * @param password
-     * @return int Response 0=loginaccepted, 1=logindenied, 2=alreadyloggedin
+     * @return int Response 0=LOGINACCEPTED, 1=LOGINDENIED, 2=ALREADYLOGGEDIN
      */
     public int authenticate(String username, String password) {
         
+        this.username = username;
+        
         // Send login request to server with username and password
-        this.out.println("LOGIN " + username + " " + password);
+        this.out.println("LOGIN " + this.username + " " + password);
         
         // Listen for response to see if it was accepted or not
         String line = null;
@@ -180,8 +205,11 @@ public class LoginManager {
             e.printStackTrace();
         }
         
+        // Clear username variable
+        this.username = null;
+        
         // Reconnect to server with a new socket
-        this.socket = connectToServer();
+        this.socket = connectToServer(true);
         
         // Display login screen to user
         showLoginScreen();
@@ -189,16 +217,17 @@ public class LoginManager {
     
     /**
      * Connect to remote server
+     * @param Boolean useConfig WHether the program should use the config file or not to find IP address
      * @return Socket socket connection to server
      */
-    public Socket connectToServer() {
+    public Socket connectToServer(Boolean useConfig) {
         Socket socket = null;
         
         // Connect to server
         try {
             
             // Create new socket connectin with server
-            socket = new Socket(askForIPAddress(), Integer.parseInt(config.getConfig("chatPort")));
+            socket = new Socket(askForIPAddress(useConfig), Integer.parseInt(config.getConfig("chatPort")));
             
         } catch (UnknownHostException e) {
             System.out.println("Unknown Host");
@@ -221,14 +250,30 @@ public class LoginManager {
     }
     
     /**
+     * Let user change server IP address
+     */
+    public void changeServerIP() {
+        this.socket = connectToServer(false);
+    }
+    
+    /**
      * Ask for Server IP Address
      * @return String IP Address
      */
-    public String askForIPAddress() {
-        return JOptionPane.showInputDialog(null,
-                messageBundle.retriveText("connect.question"),
-                messageBundle.retriveText("connect.title"),
-                JOptionPane.QUESTION_MESSAGE);
+    public String askForIPAddress(Boolean useConfig) {
+        
+        if(useConfig && config.getConfig("ipaddress") != null && !config.getConfig("ipaddress").equals("null")) {
+            return config.getConfig("ipaddress");
+        } else {
+            System.out.println("false");
+            String address =  JOptionPane.showInputDialog(null,
+                                messageBundle.retriveText("connect.question"),
+                                messageBundle.retriveText("connect.title"),
+                                JOptionPane.QUESTION_MESSAGE);
+            config.setConfig("ipaddress", address);
+            
+            return address;
+        }
     }
     
     /**
@@ -272,25 +317,6 @@ public class LoginManager {
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error showing main view: " + e);
-        }
-    }
-    
-    /**
-     * Switch to registration view
-     */
-    public void showRegistrationView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/RegisterView.fxml"));
-            scene.setRoot((Parent) loader.load());
-            stage.setTitle(messageBundle.retriveText("register.topText"));
-            stage.sizeToScene();
-            
-            // Main View Controller
-            RegisterController controller = loader.<RegisterController>getController();
-            controller.initManager(this);
-        } catch(IOException e) {
-            // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
-            System.out.println("Error showing registration view: " + e);
         }
     }
     

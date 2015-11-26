@@ -7,13 +7,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * UserHandler takes care of handling users, such as checking them in the
+ * database to help the server authenticate, and create new users.
  * @author Petter
  *
  */
 public class UserHandler {
     DatabaseHandler database = new DatabaseHandler();
     
-    
+    /**
+     * Authenticate user by checking if a row with specified username and password exists in database.
+     * @param username
+     * @param password
+     * @return boolean if the user exists or not.
+     */
     public boolean authenticateUser(String username, String password) {
         
         // Fetch user with password from database
@@ -37,10 +44,15 @@ public class UserHandler {
         return false;
     }
     
+    /**
+     * Insert a new user to the database.
+     * @param username
+     * @param password
+     */
     public void newUser(String username, String password) {
         
         // Insert username and password to database
-        database.insert("SELECT id, username, password FROM users WHERE username=\"" + username + "\" AND password=\"" + password + "\";");
+        database.insert("INSERT INTO users (username, password) VALUES (\"" + username + "\", \"" + password + "\");");
     }
     
     /**

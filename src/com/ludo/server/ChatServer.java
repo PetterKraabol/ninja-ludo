@@ -125,11 +125,20 @@ public class ChatServer {
                     // If client is attempting to register a new user REGISTER <username> <password>
                     if(this.request.startsWith("REGISTER")) {
                         
+                        /**
+                         * Arguments
+                         * 
+                         * args[0] = REGISTER
+                         * args[1] = username
+                         * args[2] = password
+                         */
+                        
                         // Register username if not already taken.
                         if(!userHandler.usernameTaken(args[1])) {
-                            userHandler.newUser(username, password);
+                            userHandler.newUser(args[1], args[2]);
                             out.println("REGISTERACCEPTED");
                         } else {
+                            System.out.println(args[1] + " is taken");
                             out.println("ALREADYEXISTS");
                         }
                     }
