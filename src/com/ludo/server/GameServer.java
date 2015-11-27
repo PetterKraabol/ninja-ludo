@@ -162,7 +162,8 @@ public class GameServer extends Thread {
                             // Read input from client
                             line = player.getIn().readLine();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            System.out.println("Lost connection with clients");
+                            break;
                         }
                         
                         // Continue if no request
