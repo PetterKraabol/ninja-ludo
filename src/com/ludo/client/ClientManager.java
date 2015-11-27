@@ -11,23 +11,18 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import com.ludo.client.controllers.GameController;
-import com.ludo.client.controllers.GameQueueController;
 import com.ludo.client.controllers.LoginController;
 import com.ludo.client.controllers.MainController;
 import com.ludo.config.Config;
 import com.ludo.i18n.MessageBundle;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * LoginManager handles login, registration and chat messages.
@@ -471,65 +466,6 @@ public class ClientManager {
         }
         
         return socket;
-    }
-    
-    /**
-     * Show the game queue window and put the user in a game queue before starting a game session.
-     */
-    public void showGameQueue() {
-        
-        // Connect to game server
-        this.gameSocket = connectToGameServer();
-        
-        try {
-            
-            // Change scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/GameQueueView.fxml"));
-            scene.setRoot((Parent) loader.load());
-            stage.setTitle("Game");
-            stage.sizeToScene();
-            
-            // Game queue controller
-            GameQueueController controller = loader.<GameQueueController>getController();
-            controller.initManager(this, this.gameOut);
-            
-            // Wait until game is ready
-            
-            String line = null;
-            while(true) {
-                
-                // Try reading server message
-                try {
-                    line = gameIn.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
-                if(line == null) {
-                    continue;
-                }
-                
-                if(line.startsWith("WAITING")) {
-                    continue;
-                }
-                
-                if(line.startsWith("NEWUSERINQUEUE")) {
-                    System.out.println("NEW USER");
-                }
-                
-                if(line.startsWith("STARTGAME")) {
-                    System.out.println("Starting game");
-                    showGameScreen();
-                    break;
-                }
-                
-            }
-            
-            showGameScreen();
-            
-        } catch(IOException e) {
-            System.out.println("Error showing game queue view: " + e);
-        }
     }
     
     /**
