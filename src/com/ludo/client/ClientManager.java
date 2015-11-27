@@ -756,7 +756,7 @@ public class ClientManager {
                 }
                 
                 // Get move from whoever's turn it is
-                while(true) {
+                /*while(true) {
                     try {
                         line = in.readLine();
                     } catch (IOException e) {
@@ -799,6 +799,7 @@ public class ClientManager {
                         this.controller.endGame(args[1]);
                     }
                 }
+                */
                 
             }
             

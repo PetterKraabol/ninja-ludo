@@ -1,6 +1,5 @@
 package com.ludo.client.controllers;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -14,6 +13,7 @@ import com.ludo.client.Coordinates;
 import com.ludo.i18n.MessageBundle;
 import com.ludo.client.ClientManager;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,7 +33,17 @@ public class GameController implements Initializable{
     /**
      * Message Bundle
      */
-    MessageBundle messageBundle = new MessageBundle();
+    private MessageBundle messageBundle = new MessageBundle();
+    
+    /**
+     * Turn
+     */
+    private boolean myTurn = false;
+    
+    /**
+     * Last dice roll
+     */
+    private int dice;
 
     // FXML Fields
     @FXML private TextArea gameChatTextArea;
@@ -193,6 +203,25 @@ public class GameController implements Initializable{
      * @param out
      */
     public void initManager(ClientManager clientManager, PrintWriter out) {
+        
+        // When pressing game button
+        gameBtn.setOnAction(new EventHandler<ActionEvent>() {
+           
+            @Override
+            public void handle(ActionEvent event) {
+                
+                if(myTurn) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("");
+                    sb.append(dice);
+                    gameBtn.setText(messageBundle.retriveText("game.moveDice") + " " + sb.toString() + " " + messageBundle.retriveText("game.moveDive.steps"));
+                    myTurn = false;
+                }
+                
+            }
+        });
+        
+        //---- Pieces ---- //
         
         // Red
         redPiece1.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -377,7 +406,9 @@ public class GameController implements Initializable{
      * It's your turn
      */
     public void itsYourTurn(int dice) {
-        JOptionPane.showMessageDialog(null, "It's your turn");
+        gameBtn.setText(messageBundle.retriveText("game.btn.roll"));
+        this.dice = dice;
+        this.myTurn = true;
     }
 
 }
