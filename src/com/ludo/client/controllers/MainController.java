@@ -62,7 +62,7 @@ public class MainController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                clientManager.showGameQueue();
+                clientManager.showGameScreen();
             }
             
         });

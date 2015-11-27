@@ -42,26 +42,6 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Label fx:id="usernameRedLabel" alignment="CENTER" prefHeight="28.0" prefWidth="250.0" text="User Red">
-         <font>
-            <Font name="Arial Black" size="19.0" />
-         </font>
-      </Label>
-      <Label fx:id="usernameBlueLabel" alignment="CENTER" layoutX="378.0" prefHeight="28.0" prefWidth="250.0" text="User Blue">
-         <font>
-            <Font name="Arial Black" size="19.0" />
-         </font>
-      </Label>
-      <Label fx:id="usernameGreenLabel" alignment="CENTER" layoutY="378.0" prefHeight="28.0" prefWidth="250.0" text="User Green">
-         <font>
-            <Font name="Arial Black" size="19.0" />
-         </font>
-      </Label>
-      <Label fx:id="usernameYellowLabel" alignment="CENTER" layoutX="378.0" layoutY="378.0" prefHeight="28.0" prefWidth="250.0" text="User Yellow">
-         <font>
-            <Font name="Arial Black" size="19.0" />
-         </font>
-      </Label>
       <Circle fx:id="redPiece1" fill="#ff1b00" layoutX="125.0" layoutY="84.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="redPiece2" fill="#ff1b00" layoutX="83.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fx:id="redPiece3" fill="#ff1b00" layoutX="167.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />

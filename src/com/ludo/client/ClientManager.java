@@ -514,13 +514,13 @@ public class ClientManager {
                 
                 if(line.startsWith("STARTGAME")) {
                     System.out.println("Starting game");
-                    showGameView();
+                    showGameScreen();
                     break;
                 }
                 
             }
             
-            showGameView();
+            showGameScreen();
             
         } catch(IOException e) {
             System.out.println("Error showing game queue view: " + e);
@@ -530,8 +530,13 @@ public class ClientManager {
     /**
      * Show game view
      */
-    public void showGameView() {
+    public void showGameScreen() {
+        
+        // Connect to game server
+        this.gameSocket = connectToGameServer();
+        
         try {
+            // Change view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ludo/client/views/GameView.fxml"));
             scene.setRoot((Parent) loader.load());
             stage.setTitle(messageBundle.retriveText("main.topText"));
@@ -542,7 +547,7 @@ public class ClientManager {
             controller.initManager(this, this.gameOut);
             
             // Start chat thread
-            this.gameThread = new GameHandler(controller.getPieces(), this.gameIn);
+            this.gameThread = new GameHandler(controller, this.gameIn);
             this.gameThread.start();
             
         } catch(IOException e) {
@@ -571,6 +576,16 @@ public class ClientManager {
         private List<Circle> pieces;
         
         /**
+         * Player color
+         */
+        private String color;
+        
+        /**
+         * GameController for accessing JavaFX elements
+         */
+        private GameController controller;        
+        
+        /**
          * Input from server
          */
         private BufferedReader in;
@@ -580,9 +595,12 @@ public class ClientManager {
          */
         private Boolean running = true;
         
-        public GameHandler(List<Circle> pieces, BufferedReader in) {
-            this.pieces = pieces;
+        public GameHandler(GameController controller, BufferedReader in) {
+            this.controller = controller;
             this.in = in;
+            
+            // JavaFX elements
+            this.pieces = controller.getPieces();
         }
         
         /**
@@ -594,35 +612,70 @@ public class ClientManager {
         }
         
         /**
-         * Run thread
+         * Run thread to read incoming game server messsages
          */
         public void run() {
             
-            // Listen for incoming server messages
-            while(this.running) {
+            // Input from server
+            String line = null;
+            
+            /**
+             * A game has been created and the player
+             * is waiting for other players to connect.
+             */
+            
+            // Tell user there is a game queue
+            controller.waitingInQueue();
+            
+            while(true) {
                 
-             // Try reading from server
-                String line = null;
-                
+                // Try reading server message
                 try {
-                    line = this.in.readLine();
+                    line = in.readLine();
                 } catch (IOException e) {
-                    System.out.println("Error reading input from game server");
+                    e.printStackTrace();
                 }
-                    
+                
                 if(line == null) {
                     continue;
                 }
                 
-                String[] args = line.split(" ");
+                // Waiting for players...
+                if(line.startsWith("WAITING")) {
+                    continue;
+                }
                 
-                // Test message
-                if(line.startsWith("TEST")) {
-                    System.out.println("TEST from server");
+                // New user in queue
+                if(line.startsWith("NEWUSERINQUEUE")) {
+                    System.out.println("NEW USER");
+                }
+                
+                // The game is starting. Broadcast: STARTGAME <player.getColor()>
+                if(line.startsWith("STARTGAME")) {
+                    System.out.println("Starting game");
+                    
+                    // Split to get color
+                    String[] args = line.split(" ");
+                    this.color = args[1];
+                    
                     break;
                 }
                 
             }
+            
+            // Tell user the game is starting
+            controller.gameHasStarted(this.color);
+            
+            /**
+             * All players have connected and the game has started.
+             */
+            while(true) {
+                System.out.println("Game loop started");
+                break;
+            }
+            
+            // Game has ended
+            System.out.println("Game has finished");
             
         }
         

@@ -7,21 +7,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import com.ludo.client.Coordinates;
+import com.ludo.i18n.MessageBundle;
 import com.ludo.client.ClientManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 
 public class GameController implements Initializable{
+    
+    /**
+     * Message Bundle
+     */
+    MessageBundle messageBundle = new MessageBundle();
 
     // FXML Fields
     @FXML private TextArea gameChatTextArea;
@@ -29,10 +39,6 @@ public class GameController implements Initializable{
     
     // FXML Labels
     @FXML private Label chatLabel;
-    @FXML private Label usernameRedLabel;
-    @FXML private Label usernameBlueLabel;
-    @FXML private Label usernameGreenLabel;
-    @FXML private Label usernameYellowLabel;
     
     // FXML Buttons
     @FXML private Button writeBtn;
@@ -176,7 +182,7 @@ public class GameController implements Initializable{
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-            
+        
     }
     
     /**
@@ -219,6 +225,22 @@ public class GameController implements Initializable{
         
         return pieces;
         
+    }
+    
+    /**
+     * Display a message that the user is in a game queue
+     */
+    public void waitingInQueue() {
+        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.queue.message"), messageBundle.retriveText("game.alert.queue.title"), JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Display a message to user that the game has started and 
+     * what color they are.
+     * @param color
+     */
+    public void gameHasStarted(String color) {
+        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.hasStarted.message") + ": " + color, messageBundle.retriveText("game.alert.hasStarted.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 
 }

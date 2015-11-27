@@ -125,8 +125,7 @@ public class GameServer extends Thread {
             
             // For every player in session; send the message
             for(Player player : players) {
-                System.out.println("Broadcast to " + player.getColor());
-                player.getOut().println(message);
+                player.getOut().println(message + " " + player.getColor());
             }
         }
         
