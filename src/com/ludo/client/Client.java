@@ -23,8 +23,12 @@ public class Client extends Application {
     	Image icon = new Image (getClass().getResourceAsStream(("/com/ludo/resources/icon.png")));
         Scene scene = new Scene(new StackPane());
         
-        ClientManager loginManager = new ClientManager(scene, stage);
+        /**
+         * Client Manager to handle login, chat and creating new games
+         */
+        ClientManager clientManage = new ClientManager(scene, stage);
         
+        // Set scene and display it
         stage.setScene(scene);
         stage.getIcons().add(icon);
         stage.show();
@@ -35,7 +39,7 @@ public class Client extends Application {
          */
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                loginManager.closeWindow();
+                clientManage.closeWindow();
                 System.exit(0);
             }
         });

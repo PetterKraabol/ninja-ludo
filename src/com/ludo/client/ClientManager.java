@@ -25,6 +25,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -576,15 +577,19 @@ public class ClientManager {
         private List<Circle> pieces;
         
         /**
-         * Fields
+         * Fields positions
          */
         private Coordinates[] fields;
         
         /**
-         * Indicators
+         * Indicate positions
          */
-        
         private Coordinates[] indicators;
+        
+        /**
+         * Indicator ellipse
+         */
+        private Ellipse indicator;
         
         /**
          * Player color
@@ -654,27 +659,89 @@ public class ClientManager {
         }
         
         /**
-         * Move a ludo piece
+         * Calculate position and move the piece
          * @param pieceId
          * @param color
          * @param steps
          */
-        private void movePiece(int pieceId, String color, int position) {
+        private void movePiece(int pieceId, String color, int fieldsMoved) {
             
-            // Piece offset in the piece list
+            
             int pieceIdOffset = 0;
-            if(color.equals("red"))    pieceIdOffset = 0;
-            if(color.equals("blue"))   pieceIdOffset = 4;
-            if(color.equals("yellow")) pieceIdOffset = 8;
-            if(color.equals("green"))  pieceIdOffset = 12;
+            int positionOffset = 0;
+            int positionHop = 0;
+            int positionHopTo = 0;
             
-            System.out.println("Move " + color + " piece to " + position);
+            if(color.equals("red")) {
+                pieceIdOffset = 0;
+                positionOffset = 0;
+                positionHop = 1;
+                positionHopTo = 53;
+            }
+            
+            if(color.equals("blue")) {
+                pieceIdOffset = 4;
+                positionOffset = 13;
+                positionHop = 14;
+                positionHopTo = 59;
+            }
+            
+            if(color.equals("yellow")) {
+                pieceIdOffset = 8;
+                positionOffset = 26;
+                positionHop = 27;
+                positionHopTo = 65;
+            }
+            
+            if(color.equals("green")) {
+                pieceIdOffset = 12;
+                positionOffset = 39;
+                positionHop = 40;
+                positionHopTo = 71;
+            }
+            
+            // Default values
+            int positionWrap = 52;
+            boolean hasWrapped = false;
             
             
-            // Set X position
+            /**
+             * Calculate position
+             */
+            int position = fieldsMoved + positionOffset;
+            
+            // If wrapped
+            if(position > positionWrap) {
+                hasWrapped = true;
+                position = position % positionWrap;
+            }
+            
+            // Check if hop
+            if(position > positionHop) {
+                position = position % positionHop + positionHopTo;
+            }
+            
+            // Movie piece
             this.pieces.get(pieceId + pieceIdOffset).setLayoutX(fields[position].getXCoordinates());
             this.pieces.get(pieceId + pieceIdOffset).setLayoutY(fields[position].getYCoordinates());
             
+        }
+        
+        /**
+         * Move indicator to whoever has the turn
+         * @param color
+         */
+        public void moveIndicator(String color) {
+            
+            int colorNumber = 1;
+            if(color.equals("red"))    colorNumber = 1;
+            if(color.equals("blue"))   colorNumber = 2;
+            if(color.equals("yellow")) colorNumber = 3;
+            if(color.equals("green"))  colorNumber = 4;
+            
+            // Move indicator
+            this.indicator.setLayoutX(indicators[colorNumber].getXCoordinates());
+            this.indicator.setLayoutY(indicators[colorNumber].getYCoordinates());
         }
         
         /**
@@ -767,6 +834,9 @@ public class ClientManager {
                         }else {
                             System.out.println(this.turn + " turn");
                         }
+                        
+                        // Move indicator
+                        this.moveIndicator(this.turn);
                         
                         break;
                         

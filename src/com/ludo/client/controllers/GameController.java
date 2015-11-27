@@ -484,6 +484,14 @@ public class GameController implements Initializable{
     }
     
     /**
+     * Get indicator ellipse object
+     * @return
+     */
+    public Ellipse getIndicator() {
+        return turneIndicatorEllipse;
+    }
+    
+    /**
      * Display a message that the user is in a game queue
      */
     public void waitingInQueue() {
@@ -503,8 +511,8 @@ public class GameController implements Initializable{
      * A player has won, end the game
      * @param string
      */
-    public void endGame(String string) {
-        // TODO Auto-generated method stub
+    public void endGame(String winner) {
+        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.end.message") + ": " + winner);
         
     }
     
