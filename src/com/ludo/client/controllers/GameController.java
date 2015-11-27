@@ -1,5 +1,6 @@
 package com.ludo.client.controllers;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -13,6 +14,7 @@ import com.ludo.client.Coordinates;
 import com.ludo.i18n.MessageBundle;
 import com.ludo.client.ClientManager;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -191,7 +193,126 @@ public class GameController implements Initializable{
      * @param out
      */
     public void initManager(ClientManager clientManager, PrintWriter out) {
-        System.out.println("GameView->initManager");
+        
+        // Red
+        redPiece1.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+             out.println("MOVE 1 red");
+            }
+        });
+        redPiece2.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+             out.println("MOVE 2 red");
+            }
+        });
+        redPiece3.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+             out.println("MOVE 3 red");
+            }
+        });
+        redPiece4.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+             out.println("MOVE 4 red");
+            }
+        });
+
+        // Blue
+        bluePiece1.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+              out.println("MOVE 1 blue");
+            }
+        });
+        bluePiece2.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+              out.println("MOVE 2 blue");
+            }
+        });
+        bluePiece3.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+              out.println("MOVE 3 blue");
+            }
+        });
+        bluePiece4.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+              out.println("MOVE 4 blue");
+            }
+        });
+
+        // Yellow
+        yellowPiece1.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                out.println("MOVE 1 yellow");
+            }
+        });
+        yellowPiece2.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                out.println("MOVE 2 yellow");
+            }
+        });
+        yellowPiece3.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                out.println("MOVE 3 yellow");
+            }
+        });
+        yellowPiece4.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                out.println("MOVE 4 yellow");
+            }
+        });
+
+        // Green
+        greenPiece1.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+               out.println("MOVE 1 green");
+            }
+        });
+        greenPiece2.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+               out.println("MOVE 2 green");
+            }
+        });
+        greenPiece3.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+               out.println("MOVE 3 green");
+            }
+        });
+        greenPiece4.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+               out.println("MOVE 4 green");
+            }
+        });
     }
 
     public List<Circle> getPieces() {
@@ -240,7 +361,24 @@ public class GameController implements Initializable{
      * @param color
      */
     public void gameHasStarted(String color) {
-        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.hasStarted.message") + ": " + color, messageBundle.retriveText("game.alert.hasStarted.title"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.hasStarted.message") + ": " + color.substring(0, 1).toUpperCase() + color.substring(1) + " Ninja", messageBundle.retriveText("game.alert.hasStarted.title"), JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * A player has won, end the game
+     * @param string
+     */
+    public void endGame(String string) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    /**
+     * It's your turn
+     */
+    public void itsYourTurn() {
+        // TODO Auto-generated method stub
+        
     }
 
 }

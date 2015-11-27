@@ -78,5 +78,21 @@ public class UserHandler {
         
         return false;
     }
+    
+    /**
+     * A player has won a game. Increase their wins by 1
+     * @param username
+     */
+    public void userWon(String username) {
+        database.update("UPDATE users SET win=win+1 WHERE username=" + username);
+    }
+    
+    /**
+     * A username has played a game. Increase their games by 1
+     * @param username
+     */
+    public void userPlayed(String username) {
+        database.update("UPDATE users SET games=games+1 WHERE username=" + username);
+    }
 
 }

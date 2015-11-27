@@ -96,6 +96,7 @@ public class GameServer extends Thread {
          * List of player objects for this gaming session
          */
         private List<Player> players = new ArrayList<Player>();
+        private UserHandler userHandler = new UserHandler();
         
         public Game() {
             System.out.println("New Game");
@@ -169,12 +170,23 @@ public class GameServer extends Thread {
                             continue;
                         }
                         
-                        // Move request: MOVE <piece_id (0-3)>
+                        // Move request: MOVE <piece_id (1-4)> <color>
                         if(line.startsWith("MOVE")) {
                             args = line.split(" ");
                             
-                            if(player.movePieceIfAllowed(Integer.parseInt(args[1]), dice)) {
-                                broadcast("MOVE " + args[1]);
+                            // Get piece ID and correct it for Player object
+                            int pieceId = Integer.parseInt(args[1]) - 1;
+                            
+                            // Continue (ignore) if trying to move another color
+                            if(!args[2].equals(player.getColor())) {
+                                continue;
+                            }
+                            
+                            // Move piece if allowed
+                            if(player.movePieceIfAllowed(pieceId, dice)) {
+                                
+                                // Broadcast move to everyone and continue to next user
+                                broadcast("MOVE " + pieceId + " " + player.getPiecePosition(pieceId));
                                 break;
                             } else {
                                 // Cannot move piece
@@ -185,9 +197,25 @@ public class GameServer extends Thread {
                     
                     // Check if user has won
                     if(player.hasWon()) {
-                        broadcast("WIN");
+                        
+                        // Broadcast win
+                        broadcast("WIN " + player.getColor());
+                        
+                        // Winner is found
                         noWinner = false;
+                        
+                        // Update winner table
+                        this.userHandler.userWon(player.getUsername());
+                        
+                        // Update every player's table
+                        for (Player selectedPlayer : players) {
+                            this.userHandler.userPlayed(selectedPlayer.getUsername());
+                        }
+                        
+                        // Break from for loop
                         break;
+                    } else {
+                        broadcast("NOWIN");
                     }
                     
                 }
@@ -207,6 +235,7 @@ public class GameServer extends Thread {
             private Socket socket;
             private PrintWriter out;
             private BufferedReader in;
+            private String username = null;
             
             /**
              * Create a player with a connection socket and color
@@ -245,6 +274,15 @@ public class GameServer extends Thread {
             }
             
             /**
+             * Get a player's piece position
+             * @param pieceId
+             * @return
+             */
+            public int getPiecePosition(int pieceId) {
+                return pieces[pieceId].getPosition();
+            }
+
+            /**
              * Check if a player has won, based on their pieces
              * @return
              */
@@ -260,14 +298,22 @@ public class GameServer extends Thread {
                 // All pieces are done, player has won!
                 return true;
             }
-
+            
+            /**
+             * Check if player can move any ludo pieces with the dice roll
+             * @param dice Dive roll
+             * @return if the user can move any pieces or not
+             */
             public boolean canMoveAny(int dice) {
                 for(Piece piece : pieces) {
                     if(!piece.validMovie(dice)) {
+                        
+                        // Cannot move any
                         return false;
                     }
                 }
                 
+                // Can move any
                 return true;
             }
 
@@ -313,6 +359,14 @@ public class GameServer extends Thread {
             }
             
             /**
+             * Get the player's username
+             * @return username
+             */
+            public String getUsername() {
+                return this.username;
+            }
+            
+            /**
              * Make user leave or join queue
              * This is usually used for leaving the queue
              */
@@ -328,13 +382,41 @@ public class GameServer extends Thread {
             }
             
             /**
-             * Thread running
+             * For the game server to be able to update user tables
+             * in the database to increase the winner's score and the
+             * player's total played games, it has to request the client's
+             * username. This will be done in the player's thread.
              */
             public void run() {
                 
-                // Waiting for other players
-                while(isInQueue()) {
-                    out.println("WAITING");
+                String line = null;
+                String[] args;
+                out.println("USERNAMEREQUEST");
+                
+                // Wait for client to return username
+                while(true) {
+                    
+                    try {
+                        line = in.readLine();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    
+                    // If no input
+                    if(line == null) {
+                        continue;
+                    }
+                    
+                    // If client sends username: USERNAME <username>
+                    if(line.startsWith("USERNAME")) {
+                        args = line.split(" ");
+                        
+                        this.username = args[1];
+                        break;
+                    }
+                    
+                    
                 }
                 
             }

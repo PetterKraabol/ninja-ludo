@@ -159,4 +159,15 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+    
+    public void update(String query) {
+        
+        // Try to execute the query
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

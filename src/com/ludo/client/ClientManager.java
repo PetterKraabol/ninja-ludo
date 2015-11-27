@@ -547,7 +547,7 @@ public class ClientManager {
             controller.initManager(this, this.gameOut);
             
             // Start chat thread
-            this.gameThread = new GameHandler(controller, this.gameIn);
+            this.gameThread = new GameHandler(controller, this.gameIn, this.gameOut, this.username);
             this.gameThread.start();
             
         } catch(IOException e) {
@@ -581,6 +581,16 @@ public class ClientManager {
         private String color;
         
         /**
+         * Remember who's turn it is by color.
+         */
+        private String turn;
+        
+        /**
+         * Last dice roll
+         */
+        private int dice;
+        
+        /**
          * GameController for accessing JavaFX elements
          */
         private GameController controller;        
@@ -591,13 +601,32 @@ public class ClientManager {
         private BufferedReader in;
         
         /**
+         * Output to server
+         */
+        private PrintWriter out;
+        
+        /**
          * Used to indicate if thread is running or not.
          */
         private Boolean running = true;
         
-        public GameHandler(GameController controller, BufferedReader in) {
+        /**
+         * Username
+         */
+        private String username;
+        
+        /**
+         * Set GameController and get the input buffer reader to get output from server
+         * @param controller To interact with the GameController
+         * @param in To read output from server
+         * @param out Send messages to server
+         * @param username This player's username
+         */
+        public GameHandler(GameController controller, BufferedReader in, PrintWriter out, String username) {
             this.controller = controller;
+            this.username = username;
             this.in = in;
+            this.out = out;
             
             // JavaFX elements
             this.pieces = controller.getPieces();
@@ -609,6 +638,28 @@ public class ClientManager {
         public void kill() {
             System.out.println("Killing thread");
             this.running = false;
+        }
+        
+        /**
+         * Move a ludo piece
+         * @param pieceId
+         * @param color
+         * @param steps
+         */
+        private void movePiece(int pieceId, String color, int steps) {
+            
+            // Piece offset in the piece list
+            int pieceIdOffset = 0;
+            if(color == "red")    pieceIdOffset = 0;
+            if(color == "blue")   pieceIdOffset = 4;
+            if(color == "yellow") pieceIdOffset = 8;
+            if(color == "green")  pieceIdOffset = 12;
+            
+            
+            // Set X position
+            //this.pieces.get(pieceId + pieceIdOffset).setLayoutX(controller.getXCoordinate(steps));
+            //this.pieces.get(pieceId + pieceIdOffset).setLayoutY(controller.getYCoordinate(steps));
+            
         }
         
         /**
@@ -636,18 +687,19 @@ public class ClientManager {
                     e.printStackTrace();
                 }
                 
+                // If not message, continue
                 if(line == null) {
                     continue;
                 }
                 
-                // Waiting for players...
-                if(line.startsWith("WAITING")) {
-                    continue;
+                // Server is requesting username
+                if(line.startsWith("USERNAMEREQUEST")) {
+                    out.println("USERNAME " + this.username);
                 }
                 
                 // New user in queue
                 if(line.startsWith("NEWUSERINQUEUE")) {
-                    System.out.println("NEW USER");
+                    // New user in queue
                 }
                 
                 // The game is starting. Broadcast: STARTGAME <player.getColor()>
@@ -669,13 +721,86 @@ public class ClientManager {
             /**
              * All players have connected and the game has started.
              */
+            System.out.println("Game loop started");
+            String[] args;
             while(true) {
-                System.out.println("Game loop started");
-                break;
+                
+                // Get turn
+                while(true) {
+                    try {
+                        line = in.readLine();
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    
+                    // If no message from server
+                    if(line == null) {
+                        continue;
+                    }
+                    
+                    // Turn message received
+                    if(line.startsWith("TURN")) {
+                        args = line.split(" ");
+                        
+                        this.turn = args[1];
+                        this.dice = Integer.parseInt(args[2]);
+                        
+                        // It's your turn
+                        if(this.turn == this.color) {
+                            controller.itsYourTurn();
+                        }
+                        
+                        break;
+                        
+                    }
+                }
+                
+                // Get move from whoever's turn it is
+                while(true) {
+                    try {
+                        line = in.readLine();
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    
+                    // If no message from server
+                    if(line == null) {
+                        continue;
+                    }
+                    
+                    // Move request received: MOVE <pieceId (1-4)>
+                    if(line.startsWith("MOVE")) {
+                        args = line.split(" ");
+                        
+                        this.movePiece(Integer.parseInt(args[1]), this.turn, Integer.parseInt(args[2]));
+                        
+                        break;
+                    }
+                }
+                
+                // Check if there is a winner
+                while(true) {
+                    try {
+                        line = in.readLine();
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    
+                    // If no message from server
+                    if(line == null) {
+                        continue;
+                    }
+                    
+                    // There is a winner
+                    if(line.startsWith("WIN")) {
+                        args = line.split(" ");
+                        
+                        // Show end screen with winner color
+                        this.controller.endGame(args[1]);
+                    }
+                }
+                
             }
-            
-            // Tell user there is a game queue
-            controller.waitingInQueue();
             
         }
         
