@@ -23,7 +23,7 @@
       </AnchorPane>
       <AnchorPane layoutX="290.0" prefHeight="607.0" prefWidth="335.0">
          <children>
-            <Label alignment="CENTER" layoutY="226.0" prefHeight="37.0" prefWidth="335.0" text="Welcome  to NinjaLudo">
+            <Label fx:id="welcomeMessageLabel" alignment="CENTER" layoutY="226.0" prefHeight="37.0" prefWidth="335.0" text="Welcome  to NinjaLudo">
                <font>
                   <Font name="Arial Bold Italic" size="27.0" />
                </font>

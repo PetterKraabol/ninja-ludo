@@ -23,6 +23,7 @@ public class MainController implements Initializable {
 	// FXML Labels
 	@FXML private Label globalChatLabel;
 	@FXML private Label friendChatLabel;
+	@FXML private Label welcomeMessageLabel;
 	
 	// FXML Tab
 	@FXML private Tab friendTab;
@@ -98,8 +99,18 @@ public class MainController implements Initializable {
     
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
     	
+    	globalChatLabel.setText(messageBundle.retriveText("main.globalChat.label"));
+    	globalChatTextField.setPromptText(messageBundle.retriveText("main.globalChat.TextField"));
+    	friendChatLabel.setText(messageBundle.retriveText("main.friendsChat.label"));
+    	friendTab.setText(messageBundle.retriveText("main.friendTab"));
+    	chatTab.setText(messageBundle.retriveText("main.chatTab"));
+    	friendTextField.setText(messageBundle.retriveText("main.addFriend.TextField"));
+    	addFriendBtn.setText(messageBundle.retriveText("main.addFrien.btn"));
+    	welcomeMessageLabel.setText(messageBundle.retriveText("main.welcomeMessage"));
+    	newGameBtn.setText(messageBundle.retriveText("main.newGame.btn"));
+    	logoutBtn.setText(messageBundle.retriveText("main.signOut.btn"));
+    	writeBtn.setText(messageBundle.retriveText("main.write.btn"));
 	}
     
     /**
