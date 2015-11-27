@@ -65,7 +65,7 @@ public class GameServer extends Thread {
                 game.addPlayer(game.new Player(listener.accept(), "yellow"));
                 
                 // Wait for green user
-                game.addPlayer(game.new Player(listener.accept(), "red"));
+                game.addPlayer(game.new Player(listener.accept(), "green"));
                 
                 game.broadcast("STARTGAME");
                 
@@ -91,10 +91,15 @@ public class GameServer extends Thread {
      *
      */
     class Game extends Thread  {
+        
+        /**
+         * List of player objects for this gaming session
+         */
         private List<Player> players = new ArrayList<Player>();
         
         public Game() {
             System.out.println("New Game");
+            
         }
         
         /**
@@ -105,13 +110,7 @@ public class GameServer extends Thread {
             System.out.println(player.getColor() + " has joined.");
             this.players.add(player);
             
-            // broadcast that a new user has joined the queue
-            try {
-                broadcast("NEWUSERINQUEUE");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            broadcast("NEWUSERINQUEUE");
         }
         
         /**
@@ -119,7 +118,7 @@ public class GameServer extends Thread {
          * @param message Broadcast message
          * @throws IOException Connection exceptions
          */
-        private void broadcast(String message) throws IOException {
+        private void broadcast(String message) {
             
             System.out.println("Broadcasting to users: " + message);
             
@@ -133,7 +132,67 @@ public class GameServer extends Thread {
          * Start the game
          */
         public void run() {
-            // Run server
+            
+            String line = null;
+            String[] args;
+            int dice;
+            boolean noWinner = true;
+            
+            while(noWinner) {
+                
+                // Cycle players for their turn.
+                for (Player player : players) {
+                    
+                    // Roll dice
+                    dice = 1 + (int)(Math.random() * Integer.parseInt(config.getConfig("dice")));
+                    
+                    // Broadcast that it's player's turn and 
+                    broadcast("TURN " + player.getColor() + " " + dice);
+                    
+                    // Check if player has any possible moves
+                    if(!player.canMoveAny(dice)) {
+                        continue;
+                    }
+                    
+                    // Listen for a move request from client
+                    while(true) {
+                        try {
+                            // Read input from client
+                            line = player.getIn().readLine();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        
+                        // Continue if no request
+                        if(line == null) {
+                            continue;
+                        }
+                        
+                        // Move request: MOVE <piece_id (0-3)>
+                        if(line.startsWith("MOVE")) {
+                            args = line.split(" ");
+                            
+                            if(player.movePieceIfAllowed(Integer.parseInt(args[1]), dice)) {
+                                broadcast("MOVE " + args[1]);
+                                break;
+                            } else {
+                                // Cannot move piece
+                                player.getOut().println("MOVEDENIED");
+                            }
+                        }
+                    }
+                    
+                    // Check if user has won
+                    if(player.hasWon()) {
+                        broadcast("WIN");
+                        noWinner = false;
+                        break;
+                    }
+                    
+                }
+            }
+            
         }
         
         /**
@@ -186,6 +245,43 @@ public class GameServer extends Thread {
             }
             
             /**
+             * Check if a player has won, based on their pieces
+             * @return
+             */
+            public boolean hasWon() {
+                
+                // Check if any piece is done.
+                for(Piece piece : pieces) {
+                    if(!piece.isDone()) {
+                        return false;
+                    }
+                }
+                
+                // All pieces are done, player has won!
+                return true;
+            }
+
+            public boolean canMoveAny(int dice) {
+                for(Piece piece : pieces) {
+                    if(!piece.validMovie(dice)) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+
+            /**
+             * Attempt to move piece if allowed, according to the game rules.
+             * @param pieceId Piece ID (0-3)
+             * @param steps How many steps to move the piece
+             * @return boolean if the piece has moved
+             */
+            public boolean movePieceIfAllowed(int pieceId, int steps) {
+                return this.pieces[pieceId].move(steps);
+            }
+
+            /**
              * Return player socket
              * @return socket
              */
@@ -199,6 +295,14 @@ public class GameServer extends Thread {
              */
             public PrintWriter getOut() {
                 return this.out;
+            }
+            
+            /**
+             * Return player input reader
+             * @return BufferedReader input from client
+             */
+            public BufferedReader getIn() {
+                return this.in;
             }
             
             /**
@@ -252,6 +356,28 @@ public class GameServer extends Thread {
                 this.position = 0;
             }
             
+            /**
+             * Check if piece can move to according to dice,
+             * if so, move the piece back. The result of this
+             * function does not affect the piece's position
+             * @param dice
+             * @return
+             */
+            public boolean validMovie(int dice) {
+                
+                // Try moving
+                if(this.move(dice)) {
+                    
+                    // Return valid, but first revert move
+                    setPosition(position - dice);
+                    return true;
+                }
+                
+                // Can't move
+                return false;
+                
+            }
+
             /**
              * Move piece a specified amount of steps from its current location
              * @param steps

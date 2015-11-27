@@ -674,8 +674,8 @@ public class ClientManager {
                 break;
             }
             
-            // Game has ended
-            System.out.println("Game has finished");
+            // Tell user there is a game queue
+            controller.waitingInQueue();
             
         }
         
