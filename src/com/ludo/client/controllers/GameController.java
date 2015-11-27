@@ -196,6 +196,23 @@ public class GameController implements Initializable{
      */
     public void initManager(ClientManager clientManager, PrintWriter out) {
         
+        writeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                
+                // If chat input is not empty
+                if(!commentTextField.getText().trim().isEmpty()) {
+                    
+                    // Send message to server
+                    out.println("MESSAGE " + commentTextField.getText().trim());
+                    
+                    // Clear chat input field
+                    commentTextField.setText("");
+                }
+            }
+        });
+        
         // Click gameBtn to roll the dice
         gameBtn.setOnAction(new EventHandler<ActionEvent>() {
            
@@ -524,11 +541,22 @@ public class GameController implements Initializable{
         this.dice = dice;
         this.myTurn = true;
     }
-
+    
+    /**
+     * Move is denied, show message
+     */
 	public void moveDenied() {
         JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.moveDenied"));
 
 		
 	}
+	
+	/**
+	 * Get game chat TextArea
+	 * @return Game chat
+	 */
+    public TextArea getGameChat() {
+        return gameChatTextArea;
+    }
 
 }

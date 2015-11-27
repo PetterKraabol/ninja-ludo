@@ -388,7 +388,6 @@ public class GameServer extends Thread {
                     try {
                         line = in.readLine();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     
@@ -403,6 +402,11 @@ public class GameServer extends Thread {
                         
                         this.username = args[1];
                         break;
+                    }
+                    
+                    // Chat messages
+                    if(line.startsWith("MESSAGE")) {
+                        broadcast("MESSAGE " + this.color + " " + line.substring("MESSAGE ".length()));
                     }
                     
                     

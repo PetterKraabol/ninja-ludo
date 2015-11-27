@@ -432,8 +432,12 @@ public class ClientManager {
         
     }
     
+    
+    
+    
+    
     /**
-     * ------------------ Game Server ------------------
+     * ----------------------------- Game Server Handler -----------------------------
      */
     
     /**
@@ -609,7 +613,12 @@ public class ClientManager {
         /**
          * GameController for accessing JavaFX elements
          */
-        private GameController controller;        
+        private GameController controller;
+        
+        /**
+         * Game Chat Manager to handle private game chats
+         */
+        private GameChatHandler gameChat;
         
         /**
          * Input from server
@@ -649,6 +658,10 @@ public class ClientManager {
             this.fields     = controller.getCoordinates();
             this.indicators = controller.getIndicators();
             this.indicator  = controller.getIndicator();
+            
+            // Game Chat
+            this.gameChat = new GameChatHandler(controller, in);
+            this.gameChat.start();
         }
         
         /**
@@ -667,12 +680,33 @@ public class ClientManager {
          */
         private void movePiece(int pieceId, String color, int fieldsMoved) {
             
-            
+            /**
+             * Offset in list of pieces.
+             * 1-4   : red
+             * 5-8   : blue
+             * 9-12  : yellow
+             * 13-16 : green
+             */
             int pieceIdOffset = 0;
+            
+            /**
+             * Piece offset from global "start" position
+             * of map which is set to red's first field.
+             */
             int positionOffset = 0;
+            
+            /**
+             * Position as of where the piece will jump onto the
+             * colored field to goal.
+             */
             int positionHop = 0;
+            
+            /**
+             * Where to hop to (first field of colored road to goal)
+             */
             int positionHopTo = 0;
             
+            // Set the above values based on which color is moving.
             if(color.equals("red")) {
                 pieceIdOffset = 0;
                 positionOffset = 0;
@@ -701,8 +735,16 @@ public class ClientManager {
                 positionHopTo = 71;
             }
             
-            // Default values
+            // Default values that are shared between every color
+            
+            /**
+             * Which field id to wrap around and continue at 1.
+             */
             int positionWrap = 52;
+            
+            /**
+             * If the user has wrapped (made 1 lap)
+             */
             boolean hasWrapped = false;
             
             
@@ -711,32 +753,28 @@ public class ClientManager {
              */
             int position = fieldsMoved + positionOffset;
             
-            // If wrapped
+            // Check if piece have wrapped
             if(position > positionWrap) {
                 hasWrapped = true;
                 position = position % positionWrap;
             }
             
-            // Check if hop
+            // Check if piece has hopped
             if(position > positionHop && hasWrapped) {
                 position = position % positionHop + positionHopTo;
             }
             
-            System.out.println("Move " + color + " to " + position);
-            
-            // Movie piece
+            // Movie piece's X and Y coordinated to the calculated position.
             this.pieces.get(pieceId + pieceIdOffset).setLayoutX(fields[position].getXCoordinates());
             this.pieces.get(pieceId + pieceIdOffset).setLayoutY(fields[position].getYCoordinates());
             
         }
         
         /**
-         * Move indicator to whoever has the turn
+         * Move indicator, which indicated who has this turn.
          * @param color
          */
         public void moveIndicator(String color) {
-            
-            System.out.println("Move indicator");
             
             int colorNumber = 1;
             if(color.equals("red"))    colorNumber = 1;
@@ -910,5 +948,75 @@ public class ClientManager {
             
         }
         
+        /**
+         * GameChatHandler handles private game chats through the game
+         * server. These messages are broadcasted to everyone in the game session.
+         * @author Petter
+         *
+         */
+        public class GameChatHandler extends Thread {
+            
+            /**
+             * GameController for JavaFX objects and running controller functions
+             */
+            private GameController controller;
+            
+            /**
+             * Game chat
+             */
+            private TextArea gameChat;
+            
+            /**
+             * Buffered reader to read incoming server messages
+             */
+            private BufferedReader in;
+            
+            /**
+             * Set controller and buffered reader for incoming server messages
+             * @param controller GameVier controller for accessing JavaFX objects
+             * @param in input from server
+             */
+            public GameChatHandler(GameController controller, BufferedReader in) {
+                this.controller = controller;
+                this.in = in;
+                
+                // Java FX objects
+                this.gameChat = controller.getGameChat();
+            }
+            
+            /**
+             * Run thread to handle incoming server messages
+             */
+            public void run() {
+                String line = null;
+                String[] args;
+                
+                // Listen for new messages
+                while(true) {
+                    
+                    try {
+                        line = in.readLine();
+                    } catch (IOException e) {
+                        break;
+                    }
+                    
+                    // If incoming message is empty
+                    if(line == null) {
+                        continue;
+                    }
+                    
+                    // If incoming message, append it to to the chat
+                    if(line.startsWith("MESSAGE")) {
+                        args = line.split(" ");
+                        
+                        // Add text to chat
+                        this.gameChat.appendText(args[1].substring(0, 1).toUpperCase() + args[1].substring(1) + " Ninja: " + line.substring("MESSAGE ".length() + args[1].length() + 1) + "\n");
+                        
+                    }
+                }
+            }
+        }
+        
     }
+   
 }

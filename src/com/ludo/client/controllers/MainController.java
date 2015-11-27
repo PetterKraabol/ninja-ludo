@@ -79,6 +79,9 @@ public class MainController implements Initializable {
             }
         });
         
+        /**
+         * Send message in chat
+         */
         writeBtn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
