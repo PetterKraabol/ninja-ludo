@@ -9,11 +9,11 @@ public class Coordinates {
 		this.Y = tmpY;
 	}
 	
-	public int getXCordinates() {
+	public int getXCoordinates() {
 		return this.X;
 	}
 	
-	public int getYCordinates() {
+	public int getYCoordinates() {
 		return this.Y;
 	}
 }

@@ -146,14 +146,15 @@ public class GameServer extends Thread {
                     
                     // Roll dice
                     dice = 1 + (int)(Math.random() * Integer.parseInt(config.getConfig("dice")));
+                    System.out.println("Dice: " + dice);
                     
                     // Broadcast that it's player's turn and 
                     broadcast("TURN " + player.getColor() + " " + dice);
                     
                     // Check if player has any possible moves
-                    /*if(!player.canMoveAny(dice)) {
+                    if(!player.canMoveAny(dice)) {
                         continue;
-                    }*/
+                    }
                     
                     // Listen for a move request from client
                     while(true) {
@@ -161,7 +162,6 @@ public class GameServer extends Thread {
                             // Read input from client
                             line = player.getIn().readLine();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         
@@ -230,7 +230,6 @@ public class GameServer extends Thread {
          */
         class Player extends Thread {
             private Piece[] pieces = new Piece[4];
-            private boolean inQueue = true;
             private String color;
             private Socket socket;
             private PrintWriter out;
@@ -246,6 +245,12 @@ public class GameServer extends Thread {
                 
                 System.out.println("New player: " + color);
                 
+                // Pieces
+                pieces[0] = new Piece();
+                pieces[1] = new Piece();
+                pieces[2] = new Piece();
+                pieces[3] = new Piece();
+                
                 // Color
                 this.color = color;
                 
@@ -256,7 +261,6 @@ public class GameServer extends Thread {
                 try {
                     this.out = new PrintWriter(this.socket.getOutputStream(), true);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 
@@ -264,7 +268,6 @@ public class GameServer extends Thread {
                 try {
                     this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 
@@ -364,21 +367,6 @@ public class GameServer extends Thread {
              */
             public String getUsername() {
                 return this.username;
-            }
-            
-            /**
-             * Make user leave or join queue
-             * This is usually used for leaving the queue
-             */
-            public void setQueue(boolean inQueue) {
-                this.inQueue = inQueue;
-            }
-            
-            /**
-             * Check if user is in queue
-             */
-            public boolean isInQueue() {
-                return this.inQueue;
             }
             
             /**

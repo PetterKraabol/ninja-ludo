@@ -42,22 +42,22 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Circle fx:id="redPiece1" fill="#ff1b00" layoutX="125.0" layoutY="84.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="redPiece2" fill="#ff1b00" layoutX="83.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="redPiece3" fill="#ff1b00" layoutX="167.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="redPiece4" fill="#ff1b00" layoutX="125.0" layoutY="168.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="bluePiece1" fill="#00aaff" layoutX="503.0" layoutY="84.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="bluePiece2" fill="#00aaff" layoutX="461.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="bluePiece3" fill="#00aaff" layoutX="544.0" layoutY="126.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="bluePiece4" fill="#00aaff" layoutX="503.0" layoutY="168.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="greenPiece1" fill="#29ff00" layoutX="125.0" layoutY="461.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="greenPiece2" fill="#29ff00" layoutX="83.0" layoutY="503.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="greenPiece3" fill="#29ff00" layoutX="167.0" layoutY="503.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="greenPiece4" fill="#29ff00" layoutX="125.0" layoutY="545.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="yellowPiece1" fill="#f5ff00" layoutX="503.0" layoutY="461.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="yellowPiece2" fill="#f5ff00" layoutX="461.0" layoutY="503.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="yellowPiece3" fill="#f5ff00" layoutX="544.0" layoutY="503.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="yellowPiece4" fill="#f5ff00" layoutX="503.0" layoutY="545.0" onMouseClicked="#selectPiece" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+       <Circle fx:id="redPiece1" fill="#ff1b00" layoutX="125.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="redPiece2" fill="#ff1b00" layoutX="83.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="redPiece3" fill="#ff1b00" layoutX="167.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="redPiece4" fill="#ff1b00" layoutX="125.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="bluePiece1" fill="#00aaff" layoutX="503.0" layoutY="84.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="bluePiece2" fill="#00aaff" layoutX="461.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="bluePiece3" fill="#00aaff" layoutX="544.0" layoutY="126.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="bluePiece4" fill="#00aaff" layoutX="503.0" layoutY="168.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="greenPiece1" fill="#29ff00" layoutX="125.0" layoutY="461.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="greenPiece2" fill="#29ff00" layoutX="83.0" layoutY="503.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="greenPiece3" fill="#29ff00" layoutX="167.0" layoutY="503.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="greenPiece4" fill="#29ff00" layoutX="125.0" layoutY="545.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="yellowPiece1" fill="#f5ff00" layoutX="503.0" layoutY="461.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="yellowPiece2" fill="#f5ff00" layoutX="461.0" layoutY="503.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="yellowPiece3" fill="#f5ff00" layoutX="544.0" layoutY="503.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="yellowPiece4" fill="#f5ff00" layoutX="503.0" layoutY="545.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
       <Ellipse fx:id="turneIndicatorEllipse" fill="#ff6e00" layoutX="225.0" layoutY="225.0" radiusX="17.0" radiusY="17.0" stroke="BLACK" strokeType="INSIDE">
          <effect>
             <DropShadow />

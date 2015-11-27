@@ -552,7 +552,7 @@ public class ClientManager {
             
         } catch(IOException e) {
             // Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, e);
-            System.out.println("Error showing main view: " + e);
+            System.out.println("Error showing game screen: " + e);
         }
     }
     
@@ -574,6 +574,17 @@ public class ClientManager {
          * 13-16 : green
          */
         private List<Circle> pieces;
+        
+        /**
+         * Fields
+         */
+        private Coordinates[] fields;
+        
+        /**
+         * Indicators
+         */
+        
+        private Coordinates[] indicators;
         
         /**
          * Player color
@@ -629,7 +640,9 @@ public class ClientManager {
             this.out = out;
             
             // JavaFX elements
-            this.pieces = controller.getPieces();
+            this.pieces     = controller.getPieces();
+            this.fields     = controller.getCoordinates();
+            this.indicators = controller.getIndicators();
         }
         
         /**
@@ -646,7 +659,7 @@ public class ClientManager {
          * @param color
          * @param steps
          */
-        private void movePiece(int pieceId, String color, int steps) {
+        private void movePiece(int pieceId, String color, int position) {
             
             // Piece offset in the piece list
             int pieceIdOffset = 0;
@@ -655,10 +668,12 @@ public class ClientManager {
             if(color == "yellow") pieceIdOffset = 8;
             if(color == "green")  pieceIdOffset = 12;
             
+            System.out.println("Move " + color + " piece to " + position);
+            
             
             // Set X position
-            //this.pieces.get(pieceId + pieceIdOffset).setLayoutX(controller.getXCoordinate(steps));
-            //this.pieces.get(pieceId + pieceIdOffset).setLayoutY(controller.getYCoordinate(steps));
+            this.pieces.get(pieceId + pieceIdOffset).setLayoutX(fields[position].getXCoordinates());
+            this.pieces.get(pieceId + pieceIdOffset).setLayoutY(fields[position].getYCoordinates());
             
         }
         
@@ -746,8 +761,11 @@ public class ClientManager {
                         this.dice = Integer.parseInt(args[2]);
                         
                         // It's your turn
-                        if(this.turn == this.color) {
+                        if(this.turn.equals(this.color)) {
+                            System.out.println("My turn");
                             controller.itsYourTurn(this.dice);
+                        }else {
+                            System.out.println(this.turn + " turn");
                         }
                         
                         break;
@@ -768,9 +786,11 @@ public class ClientManager {
                         continue;
                     }
                     
-                    // Move request received: MOVE <pieceId (1-4)>
+                    // Move request received: MOVE <pieceId (1-4)> <position>
                     if(line.startsWith("MOVE")) {
                         args = line.split(" ");
+                        
+                        System.out.println(line);
                         
                         this.movePiece(Integer.parseInt(args[1]), this.turn, Integer.parseInt(args[2]));
                         
@@ -782,7 +802,7 @@ public class ClientManager {
                     	controller.moveDenied();
                     }
                 }
-                /*
+                
                 // Check if there is a winner
                 while(true) {
                     try {
@@ -796,6 +816,11 @@ public class ClientManager {
                         continue;
                     }
                     
+                    // No winners
+                    if(line.startsWith("NOWIN")) {
+                        break;
+                    }
+                    
                     // There is a winner
                     if(line.startsWith("WIN")) {
                         args = line.split(" ");
@@ -804,7 +829,7 @@ public class ClientManager {
                         this.controller.endGame(args[1]);
                     }
                 }
-                */
+                
                 
             }
             
