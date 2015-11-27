@@ -4,6 +4,7 @@
 package com.ludo.server;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -208,6 +209,11 @@ public class ChatServer extends Thread {
                         for(PrintWriter writer : writers) {
                             writer.println("MESSAGE " + this.username + " " + this.request.substring("MESSAGE ".length()));
                         }
+                        
+                        // Write chat to file
+                        FileWriter fw = new FileWriter("chatlog.dat", true);
+                        fw.write(this.username + ": " + this.request.substring("MESSAGE ".length()) + "\n");
+                        fw.close();
                     }
                     
                     // Manual logout from client

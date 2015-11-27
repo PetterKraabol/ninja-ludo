@@ -388,7 +388,7 @@ public class GameServer extends Thread {
                     try {
                         line = in.readLine();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        break;
                     }
                     
                     // If no input
