@@ -663,10 +663,10 @@ public class ClientManager {
             
             // Piece offset in the piece list
             int pieceIdOffset = 0;
-            if(color == "red")    pieceIdOffset = 0;
-            if(color == "blue")   pieceIdOffset = 4;
-            if(color == "yellow") pieceIdOffset = 8;
-            if(color == "green")  pieceIdOffset = 12;
+            if(color.equals("red"))    pieceIdOffset = 0;
+            if(color.equals("blue"))   pieceIdOffset = 4;
+            if(color.equals("yellow")) pieceIdOffset = 8;
+            if(color.equals("green"))  pieceIdOffset = 12;
             
             System.out.println("Move " + color + " piece to " + position);
             
