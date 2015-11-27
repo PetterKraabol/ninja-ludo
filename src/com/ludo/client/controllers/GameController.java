@@ -376,9 +376,8 @@ public class GameController implements Initializable{
     /**
      * It's your turn
      */
-    public void itsYourTurn() {
-        // TODO Auto-generated method stub
-        
+    public void itsYourTurn(int dice) {
+        JOptionPane.showMessageDialog(null, "It's your turn");
     }
 
 }

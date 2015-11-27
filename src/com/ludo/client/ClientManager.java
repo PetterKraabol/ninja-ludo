@@ -747,7 +747,7 @@ public class ClientManager {
                         
                         // It's your turn
                         if(this.turn == this.color) {
-                            controller.itsYourTurn();
+                            controller.itsYourTurn(this.dice);
                         }
                         
                         break;

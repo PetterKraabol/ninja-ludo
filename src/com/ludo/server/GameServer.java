@@ -151,9 +151,9 @@ public class GameServer extends Thread {
                     broadcast("TURN " + player.getColor() + " " + dice);
                     
                     // Check if player has any possible moves
-                    if(!player.canMoveAny(dice)) {
+                    /*if(!player.canMoveAny(dice)) {
                         continue;
-                    }
+                    }*/
                     
                     // Listen for a move request from client
                     while(true) {
