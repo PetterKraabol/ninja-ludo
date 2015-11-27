@@ -648,6 +648,7 @@ public class ClientManager {
             this.pieces     = controller.getPieces();
             this.fields     = controller.getCoordinates();
             this.indicators = controller.getIndicators();
+            this.indicator  = controller.getIndicator();
         }
         
         /**
@@ -717,9 +718,11 @@ public class ClientManager {
             }
             
             // Check if hop
-            if(position > positionHop) {
+            if(position > positionHop && hasWrapped) {
                 position = position % positionHop + positionHopTo;
             }
+            
+            System.out.println("Move " + color + " to " + position);
             
             // Movie piece
             this.pieces.get(pieceId + pieceIdOffset).setLayoutX(fields[position].getXCoordinates());
@@ -732,6 +735,8 @@ public class ClientManager {
          * @param color
          */
         public void moveIndicator(String color) {
+            
+            System.out.println("Move indicator");
             
             int colorNumber = 1;
             if(color.equals("red"))    colorNumber = 1;
