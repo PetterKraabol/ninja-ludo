@@ -756,7 +756,7 @@ public class ClientManager {
                 }
                 
                 // Get move from whoever's turn it is
-                /*while(true) {
+                while(true) {
                     try {
                         line = in.readLine();
                     } catch (IOException e) {
@@ -776,8 +776,13 @@ public class ClientManager {
                         
                         break;
                     }
+                    
+                    // If move was denied
+                    if(line.startsWith("MOVEDENIED")) {
+                    	controller.moveDenied();
+                    }
                 }
-                
+                /*
                 // Check if there is a winner
                 while(true) {
                     try {

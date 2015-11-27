@@ -38,7 +38,7 @@ public class GameController implements Initializable{
     /**
      * Turn
      */
-    private boolean myTurn = false;
+    private boolean myTurn = false; 
     
     /**
      * Last dice roll
@@ -216,6 +216,7 @@ public class GameController implements Initializable{
                     sb.append(dice);
                     gameBtn.setText(messageBundle.retriveText("game.moveDice") + " " + sb.toString() + " " + messageBundle.retriveText("game.moveDive.steps"));
                     myTurn = false;
+                 
                 }
                 
             }
@@ -228,7 +229,7 @@ public class GameController implements Initializable{
 
             @Override
             public void handle(MouseEvent event) {
-             out.println("MOVE 1 red");
+            out.println("MOVE 1 red");
             }
         });
         redPiece2.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -410,5 +411,11 @@ public class GameController implements Initializable{
         this.dice = dice;
         this.myTurn = true;
     }
+
+	public void moveDenied() {
+        JOptionPane.showMessageDialog(null, messageBundle.retriveText("game.alert.moveDenied"));
+
+		
+	}
 
 }
