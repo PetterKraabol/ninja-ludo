@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 
 public class MainController implements Initializable {
 
@@ -105,7 +106,8 @@ public class MainController implements Initializable {
      * Return chat window TextArea
      * @return TextArea Chat
      */
-    public TextArea getTextArea() {
+    public TextArea getGlobalChat() {
+        globalChatTextArea.setWrapText(true);
         return globalChatTextArea;
     }
 

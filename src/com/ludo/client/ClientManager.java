@@ -323,7 +323,7 @@ public class ClientManager {
             controller.initManager(this, this.chatOut);
             
             // Start chat thread
-            this.chatThread = new ChatHandler(controller.getTextArea(), chatIn);
+            this.chatThread = new ChatHandler(controller, chatIn);
             this.chatThread.start();
             
         } catch(IOException e) {
@@ -344,21 +344,53 @@ public class ClientManager {
      *
      */
     private static class ChatHandler extends Thread {
-        private TextArea chat;
+        
+        /**
+         * Global Chat text area
+         */
+        private TextArea globalChat;
+        
+        /**
+         * Request from chat server
+         */
         private String request;
+        
+        /**
+         * Request arguments
+         */
         private String[] args;
+        
+        /**
+         * Input from chat server
+         */
         private BufferedReader in;
+        
+        /**
+         * Decides if thread should be listening on server messages
+         */
         private Boolean running;
         
-        public ChatHandler(TextArea chat, BufferedReader in) {
-            this.chat = chat;
-            this.chat.setWrapText(true);
+        /**
+         * MainController to access JavaFX elements.
+         */
+        private MainController controller;
+        
+        /**
+         * Set controller and the input reader from chat server
+         * @param controller MainController for JavaFX elements
+         * @param in Reads messages coming in from chat server
+         */
+        public ChatHandler(MainController controller, BufferedReader in) {
+            this.controller = controller;
             this.in = in;
             this.running = true;
+            
+            // JavaFX elements from controller
+            this.globalChat = controller.getGlobalChat();
         }
         
         /**
-         * "Kill" thread
+         * "Kill" thread to make it stop listening for new server messages
          */
         public void kill() {
             System.out.println("Killing thread");
@@ -385,7 +417,7 @@ public class ClientManager {
                         this.args = this.request.split(" ");
                         
                         // Add text to chat
-                        this.chat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1) + "\n");
+                        this.globalChat.appendText(args[1] + ": " + this.request.substring("MESSAGE ".length() + this.args[1].length() + 1) + "\n");
                         
                     }
                     
